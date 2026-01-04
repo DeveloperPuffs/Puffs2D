@@ -1,0 +1,9 @@
+{
+        "name": "puffs2d",
+        "version": "1.0.0",
+        "description": "Submission for the GDKO Round 1",
+        "author": "PlasmaPuffs",
+        "scripts": {
+                "test": "dev"
+        }
+}
