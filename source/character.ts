@@ -131,8 +131,8 @@ export class Character extends Entity2D {
 
                 this.sprite.x = this.x;
                 this.sprite.y = this.y;
-                this.sprite.w = this.w * 1 + Math.cos(currentTime / 200) / 40;
-                this.sprite.h = this.h * 1 + Math.sin(currentTime / 200) / 40
+                this.sprite.w = this.w * (1 + Math.cos(currentTime / 200) / 40);
+                this.sprite.h = this.h * (1 + Math.sin(currentTime / 200) / 40)
         }
 
         renderLeftHand() {
