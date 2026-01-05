@@ -21,6 +21,8 @@ export class Character extends Entity2D {
 
         private sight: Vector2D;
         private sprite: Rectangle2D;
+        private outlineColor: string;
+        private outlineThickness: number;
 
         private keys: Object;
         private name: string;
@@ -79,6 +81,14 @@ export class Character extends Entity2D {
                 this.eyes = new TextureSVG("eyes.svg");
                 this.mouth = new TextureSVG("mouth.svg");
                 this.hand = new TextureSVG("hand.svg");
+
+                this.outlineColor = "#FFFFFF";
+
+                const outlineThicknessSlider = document.querySelector<HTMLInputElement>("#outline-thickness");
+                this.outlineThickness = Number.parseFloat(outlineThicknessSlider.value);
+                outlineThicknessSlider.addEventListener("input", () => {
+                        this.outlineThickness = Number.parseFloat(outlineThicknessSlider.value);
+                });
         }
 
         async load() {
@@ -89,8 +99,7 @@ export class Character extends Entity2D {
                         this.hand.load()
                 ]);
 
-                const colorPicker = document.querySelector<ColorPickerElement>("#body-color");
-                colorPicker.onColorChange(color => {
+                document.querySelector<ColorPickerElement>("#body-color").onColorChange(color => {
                         const bodyPath = this.body.svg.querySelector<SVGClipPathElement>("#body");
                         bodyPath.style.fill = color;
                         this.body.rasterize();
@@ -102,6 +111,10 @@ export class Character extends Entity2D {
 
                 // TODO: Make eyes blink at an inverval
                 // TODO: Options to toggle blinking, control blink interval, speed?
+
+                document.querySelector<ColorPickerElement>("#outline-color").onColorChange(color => {
+                        this.outlineColor = color;
+                });
         }
 
         update(deltaTime: number) {
@@ -171,7 +184,7 @@ export class Character extends Entity2D {
                 const BUFFER_WIDTH = 100;
                 const BUFFER_HEIGHT = 100;
 
-                const outlined = this.canvas.outliner.process(BUFFER_WIDTH, BUFFER_HEIGHT, context => {
+                const outlined = this.canvas.outliner.process(BUFFER_WIDTH, BUFFER_HEIGHT, this.outlineColor, this.outlineThickness, context => {
                         const renderLeftHand = () => {
                                 context.save();
                                 context.translate(shoulderOffsetX_left, shoulderOffsetY); // Origin is at shoulder
