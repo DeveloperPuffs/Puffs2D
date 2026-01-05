@@ -8,7 +8,7 @@ export class Camera2D extends Vector2D {
 
         private drag: Vector2D;
         private panning: number = 5;
-        private speed: number = 5;
+        private speed: number = 2;
 
         private shakePower: number = 0;
         private shakeDirection: number = 0;
@@ -23,7 +23,7 @@ export class Camera2D extends Vector2D {
                 this.current = Vector2D.zero();
                 this.target = Vector2D.zero();
 
-                this.drag = new Vector2D(0.25, 0.25);
+                this.drag = new Vector2D(0.1, 0.25);
 
                 this.mouse = Vector2D.zero();
                 window.addEventListener("mousemove", event => {

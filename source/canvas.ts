@@ -31,8 +31,6 @@ export class Canvas2D {
 
                 resizeObserver.observe(this.element);
 
-                // TODO: Track mouse position here
-
                 this.camera = new Camera2D(this);
                 this.background = new Background(this);
                 this.player = new Character(this);

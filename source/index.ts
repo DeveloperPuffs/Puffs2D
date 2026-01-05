@@ -156,6 +156,4 @@ stepper.childNodes.forEach(child => {
         });
 });
 
-export function start() {
-        presentStep(Step.GENERAL);
-}
+presentStep(Step.GENERAL);

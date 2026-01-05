@@ -10,7 +10,9 @@ export class Background {
                 const gridSize = 25;
 
                 this.canvas.context.save();
-                this.canvas.context.rotate((-5 * Math.PI) / 180);
+                this.canvas.context.translate(this.canvas.camera.x, this.canvas.camera.y);
+                this.canvas.context.rotate(-(5 * Math.PI) / 180);
+                this.canvas.context.translate(-this.canvas.camera.x, -this.canvas.camera.y);
                 this.canvas.context.lineWidth = 2;
 
                 const diagonal = Math.sqrt(
