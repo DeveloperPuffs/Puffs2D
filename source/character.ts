@@ -18,6 +18,8 @@ export class Character extends Entity2D {
         private state: State;
         private direction: Direction;
         private speed: number;
+        private blink: number;
+        private blinking: boolean;
 
         private sight: Vector2D;
         private sprite: Rectangle2D;
@@ -89,6 +91,11 @@ export class Character extends Entity2D {
                 outlineThicknessSlider.addEventListener("input", () => {
                         this.outlineThickness = Number.parseFloat(outlineThicknessSlider.value);
                 });
+
+                this.blink = 0;
+                this.blinking = false;
+                const animateBlink = () => {
+                };
         }
 
         async load() {
@@ -146,10 +153,6 @@ export class Character extends Entity2D {
                 this.sprite.y = this.y;
                 this.sprite.w = this.w * (1 + Math.cos(currentTime / 200) / 40);
                 this.sprite.h = this.h * (1 + Math.sin(currentTime / 200) / 40)
-        }
-
-        renderRightHand() {
-
         }
 
         render() {
@@ -232,12 +235,15 @@ export class Character extends Entity2D {
                         const lookX = (this.sight.x - this.canvas.width / 2) / 200;
                         const lookY = (this.sight.y - this.canvas.height / 2) / 200;
 
+                        const eyesWidth = this.sprite.w / 1.5;
+                        const eyesHeight = this.sprite.h / 1.5;
+
                         context.drawImage(
                                 this.eyes.image,
-                                -this.sprite.w / 2 + lookX + (this.direction ? this.sprite.w / 16 : -this.sprite.w / 16),
-                                -this.sprite.h / 2 + lookY,
-                                this.sprite.w,
-                                this.sprite.h
+                                -eyesWidth / 2 + lookX + (this.direction ? this.sprite.w / 16 : -this.sprite.w / 16),
+                                -eyesHeight / 2 + lookY - this.sprite.h / 4,
+                                eyesWidth,
+                                eyesHeight
                         );
 
                         context.drawImage(

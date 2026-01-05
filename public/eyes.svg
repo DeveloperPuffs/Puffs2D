@@ -1,8 +1,34 @@
-<svg width="256" height="256" viewBox="0 0 256 256" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="160.28229"
+   height="114.42498"
+   viewBox="0 0 160.28229 114.42498"
+   xml:space="preserve"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="eyes.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs1" /><sodipodi:namedview
+   id="namedview1"
+   pagecolor="#505050"
+   bordercolor="#ffffff"
+   borderopacity="1"
+   inkscape:showpageshadow="0"
+   inkscape:pageopacity="0"
+   inkscape:pagecheckerboard="1"
+   inkscape:deskcolor="#505050"><inkscape:page
+     x="0"
+     y="0"
+     width="160.28229"
+     height="114.42498"
+     id="page2"
+     margin="0"
+     bleed="0" /></sodipodi:namedview>
         <path
-                id="eyes"
-                style="display:inline;fill:#000;fill-opacity:1;stroke:none;stroke-width:5.00001;stroke-dasharray:none;stroke-opacity:1"
-                d="M143.647 16.529c-10.524 7.185-10.624 23.798-10.402 43.147 1.255 12.21-4.38 29.751 9.45 35.995 17.06 1.729 13.623-64.769 9.183-75.952-.769-1.565-3.902-5.386-8.231-3.19M47.584 24.91c-5.4 11.697-3.907 42.463-3.109 54.161.787 18.796 13.544 17.697 17.352 9.685 2.497-5.253 3.466-17.433 3.966-36.316 2.372-45.067-12.935-38.273-18.21-27.53"
-                transform="translate(-15.2 -14.688)scale(1.43319)"
-        />
+   id="eyes"
+   style="display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:7.16596;stroke-dasharray:none;stroke-opacity:1"
+   d="M 143.29557,0.95199172 C 128.21268,11.249462 128.06936,35.059047 128.38753,62.789841 c 1.79865,17.49925 -6.27737,42.638839 13.54364,51.587669 24.45023,2.47799 19.52435,-92.826278 13.16099,-108.8536422 -1.10212,-2.2429423 -5.59231,-7.7191613 -11.79659,-4.57187608 M 5.6190412,12.963557 C -2.1201848,29.727581 0.01956787,73.821104 1.1632535,90.586561 2.291174,117.5248 20.574379,115.94972 26.031967,104.46701 29.610642,96.938459 30.999403,79.482205 31.715998,52.419278 35.115525,-12.170296 13.177686,-2.4332031 5.617608,12.963557" />
 </svg>
