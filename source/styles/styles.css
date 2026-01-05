@@ -327,7 +327,6 @@ main.editing > #canvas {
 
 .color-picker > .presets > button {
         border-radius: var(--large-radius);
-        background-color: var(--color);
         width: var(--medium-spacing);
         height: var(--medium-spacing);
         padding: 0;

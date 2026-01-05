@@ -169,12 +169,19 @@ export function setupColorPickers() {
 
                 const presets = colorPicker.querySelector<HTMLDivElement>(".presets");
                 if (presets !== null) {
-                        presets.querySelectorAll<HTMLButtonElement>("button").forEach(button => {
+                        const presetColors = presets.textContent?.split(",") ?? [];
+                        presets.replaceChildren();
+
+                        for (const presetColor of presetColors) {
+                                const button = document.createElement("button");
+                                button.style.backgroundColor = presetColor;
                                 button.addEventListener("click", () => {
-                                        color = button.style.getPropertyValue("--color");
+                                        color = presetColor;
                                         triggerColorPickerChangeListeners();
                                 });
-                        });
+
+                                presets.appendChild(button);
+                        }
                 }
 
                 const slidersContainer = colorPicker.querySelector<HTMLDivElement>(".sliders");
@@ -202,6 +209,7 @@ export function setupColorPickers() {
                         }
 
                         colorPicker.onColorChange(colorChanged);
+                        colorChanged(color);
                 }
         });
 }
