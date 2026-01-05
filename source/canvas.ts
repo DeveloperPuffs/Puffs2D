@@ -1,6 +1,7 @@
 import { Camera2D } from "./camera";
 import { Character } from "./character";
 import { Background } from "./background";
+import { Outliner } from "./outliner";
 
 export class Canvas2D {
         private element: HTMLCanvasElement;
@@ -8,6 +9,7 @@ export class Canvas2D {
 
         public camera: Camera2D;
         public background: Background;
+        public outliner: Outliner;
         public player: Character;
 
         private currentTime: number;
@@ -33,6 +35,7 @@ export class Canvas2D {
 
                 this.camera = new Camera2D(this);
                 this.background = new Background(this);
+                this.outliner = new Outliner();
                 this.player = new Character(this);
 
                 this.currentTime = 0;

@@ -135,58 +135,8 @@ export class Character extends Entity2D {
                 this.sprite.h = this.h * (1 + Math.sin(currentTime / 200) / 40)
         }
 
-        renderLeftHand() {
-                const currentTime = Date.now();
-
-                const handWidth = this.sprite.w / 3;
-                const handHeight = this.sprite.h / 3;
-
-                const shoulderOffsetX = -this.sprite.w * 0.6;
-                const shoulderOffsetY = this.sprite.h * -0.3;
-
-                const handShoulderDistance = this.sprite.w / 3;
-                const armAngleRange = this.state === State.RUNNING ? Math.PI / 3 : Math.PI / 30;
-                const armAngle = Math.sin(currentTime / 200) * armAngleRange;
-
-                this.canvas.context.save();
-                this.canvas.context.translate(shoulderOffsetX, shoulderOffsetY); // Origin is at shoulder
-
-                this.canvas.context.drawImage(
-                        this.hand.image,
-                        handShoulderDistance * Math.cos(armAngle + Math.PI / 2),
-                        handShoulderDistance * Math.sin(armAngle + Math.PI / 2),
-                        handWidth,
-                        handHeight
-                );
-
-                this.canvas.context.restore();
-        }
-
         renderRightHand() {
-                const currentTime = Date.now();
 
-                const handWidth = this.sprite.w / 3;
-                const handHeight = this.sprite.h / 3;
-
-                const shoulderOffsetX = this.sprite.w * 0.2;
-                const shoulderOffsetY = this.sprite.h * -0.3;
-
-                const handShoulderDistance = this.sprite.w / 3;
-                const armAngleRange = this.state === State.RUNNING ? Math.PI / 3 : Math.PI / 30;
-                const armAngle = Math.sin((currentTime / 200) + Math.PI) * armAngleRange;
-
-                this.canvas.context.save();
-                this.canvas.context.translate(shoulderOffsetX, shoulderOffsetY); // Origin is at shoulder
-
-                this.canvas.context.drawImage(
-                        this.hand.image,
-                        handShoulderDistance * Math.cos(armAngle + Math.PI / 2),
-                        handShoulderDistance * Math.sin(armAngle + Math.PI / 2),
-                        handWidth,
-                        handHeight
-                );
-
-                this.canvas.context.restore();
         }
 
         render() {
@@ -196,52 +146,103 @@ export class Character extends Entity2D {
 
                 this.canvas.context.save();
                 this.canvas.context.fillStyle = "black";
-                this.canvas.context.globalAlpha = 0.5;
-                this.canvas.context.filter = "blur(8px)";
+                this.canvas.context.filter = "blur(10px)";
 
                 this.canvas.context.beginPath();
                 this.canvas.context.ellipse(0, this.sprite.h / 2, this.sprite.w / 1.5, this.sprite.h / 6, 0, 0, Math.PI * 2);
                 this.canvas.context.fill();
                 this.canvas.context.restore();
 
-                if (this.direction) {
-                        this.renderRightHand();
-                } else {
-                        this.renderLeftHand();
-                }
+                const currentTime = Date.now();
 
-                this.canvas.context.drawImage(
-                        this.body.image,
-                        -this.sprite.w / 2,
-                        -this.sprite.h / 2,
-                        this.sprite.w,
-                        this.sprite.h
-                );
+                const handWidth = this.sprite.w / 3;
+                const handHeight = this.sprite.h / 3;
 
-                const lookX = (this.sight.x - this.canvas.width / 2) / 200;
-                const lookY = (this.sight.y - this.canvas.height / 2) / 200;
+                const shoulderOffsetX_left = -this.sprite.w * 0.6;
+                const shoulderOffsetX_right = this.sprite.w * 0.2;
+                const shoulderOffsetY = this.sprite.h * -0.3;
 
-                this.canvas.context.drawImage(
-                        this.eyes.image,
-                        -this.sprite.w / 2 + lookX + (this.direction ? this.sprite.w / 16 : -this.sprite.w / 16),
-                        -this.sprite.h / 2 + lookY,
-                        this.sprite.w,
-                        this.sprite.h
-                );
+                const handShoulderDistance = this.sprite.w / 3;
+                const armAngleRange = this.state === State.RUNNING ? Math.PI / 3 : Math.PI / 30;
+                const armAngle_left = Math.sin((currentTime / 200)) * armAngleRange;
+                const armAngle_right = Math.sin((currentTime / 200) + Math.PI) * armAngleRange;
 
-                this.canvas.context.drawImage(
-                        this.mouth.image,
-                        -this.sprite.w / 2 + (this.direction ? this.sprite.w / 16 : -this.sprite.w / 16),
-                        -this.sprite.h / 2,
-                        this.sprite.w,
-                        this.sprite.h
-                );
+                // I need to make it bigger to make sure that the entire character sprite fits
+                const BUFFER_WIDTH = 100;
+                const BUFFER_HEIGHT = 100;
 
-                if (this.direction) {
-                        this.renderLeftHand();
-                } else {
-                        this.renderRightHand();
-                }
+                const outlined = this.canvas.outliner.process(BUFFER_WIDTH, BUFFER_HEIGHT, context => {
+                        const renderLeftHand = () => {
+                                context.save();
+                                context.translate(shoulderOffsetX_left, shoulderOffsetY); // Origin is at shoulder
+
+                                context.drawImage(
+                                        this.hand.image,
+                                        handShoulderDistance * Math.cos(armAngle_left + Math.PI / 2),
+                                        handShoulderDistance * Math.sin(armAngle_left + Math.PI / 2),
+                                        handWidth,
+                                        handHeight
+                                );
+
+                                context.restore();
+                        };
+
+                        const renderRightHand = () => {
+                                context.save();
+                                context.translate(shoulderOffsetX_right, shoulderOffsetY); // Origin is at shoulder
+
+                                context.drawImage(
+                                        this.hand.image,
+                                        handShoulderDistance * Math.cos(armAngle_right + Math.PI / 2),
+                                        handShoulderDistance * Math.sin(armAngle_right + Math.PI / 2),
+                                        handWidth,
+                                        handHeight
+                                );
+
+                                context.restore();
+                        };
+
+                        if (this.direction === Direction.RIGHT) {
+                                renderRightHand();
+                        } else {
+                                renderLeftHand();
+                        }
+
+                        context.drawImage(
+                                this.body.image,
+                                -this.sprite.w / 2,
+                                -this.sprite.h / 2,
+                                this.sprite.w,
+                                this.sprite.h
+                        );
+
+                        const lookX = (this.sight.x - this.canvas.width / 2) / 200;
+                        const lookY = (this.sight.y - this.canvas.height / 2) / 200;
+
+                        context.drawImage(
+                                this.eyes.image,
+                                -this.sprite.w / 2 + lookX + (this.direction ? this.sprite.w / 16 : -this.sprite.w / 16),
+                                -this.sprite.h / 2 + lookY,
+                                this.sprite.w,
+                                this.sprite.h
+                        );
+
+                        context.drawImage(
+                                this.mouth.image,
+                                -this.sprite.w / 2 + (this.direction ? this.sprite.w / 16 : -this.sprite.w / 16),
+                                -this.sprite.h / 2,
+                                this.sprite.w,
+                                this.sprite.h
+                        );
+
+                        if (this.direction === Direction.RIGHT) {
+                                renderLeftHand();
+                        } else {
+                                renderRightHand();
+                        }
+                });
+
+                this.canvas.context.drawImage(outlined, -BUFFER_WIDTH / 2, -BUFFER_HEIGHT / 2);
 
                 if (this.name !== "") {
                         let label = this.name;
