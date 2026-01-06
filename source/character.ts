@@ -20,6 +20,7 @@ export class Character extends Entity2D {
         private speed: number;
 
         private eyesScale: number;
+        private naturalScale: Vector2D;
 
         private sight: Vector2D;
         private sprite: Rectangle2D;
@@ -33,6 +34,11 @@ export class Character extends Entity2D {
         private eyes: TextureSVG;
         private mouth: TextureSVG;
         private hand: TextureSVG;
+
+        private sword: HTMLImageElement | undefined;
+        private currentSwingAngle: number = 0;
+        private targetSwingAngle: number = 0;
+        private swingVelocity: number = 0;
 
         constructor(private canvas: Canvas2D) {
                 super(0, 0, 50, 50);
@@ -93,6 +99,18 @@ export class Character extends Entity2D {
 
                 this.eyesScale = 1;
                 this.scheduleBlink();
+
+                window.addEventListener("click", () => {
+                        if (this.targetSwingAngle === 180) {
+                                this.targetSwingAngle = 0;
+                        } else {
+                                this.targetSwingAngle = 180;
+                        }
+
+                        this.canvas.camera.shake(2.5);
+                });
+
+                this.naturalScale = new Vector2D(1, 1);
         }
 
         scheduleBlink() {
@@ -125,6 +143,19 @@ export class Character extends Entity2D {
         }
 
         async load() {
+                this.sword = await new Promise((resolve, reject) => {
+                        const image = new Image();
+                        image.onload = () => {
+                                resolve(image);
+                        };
+
+                        image.onerror = error => {
+                                reject(error);
+                        }
+
+                        image.src = "placeholder.png";
+                });
+
                 await Promise.all([
                         this.body.load(),
                         this.eyes.load(),
@@ -161,6 +192,9 @@ export class Character extends Entity2D {
                 this.acceleration.y = this.speed * vertical * diagonal;
                 super.update(deltaTime);
 
+                this.naturalScale.x += (1 - this.naturalScale.x) * 0.1;
+                this.naturalScale.y += (1 - this.naturalScale.y) * 0.1;
+
                 const currentTime = Date.now();
 
                 this.state = Math.abs(this.velocity.x) + Math.abs(this.velocity.y) > 2 ?
@@ -168,8 +202,15 @@ export class Character extends Entity2D {
 
                 this.sprite.x = this.x;
                 this.sprite.y = this.y;
-                this.sprite.w = this.w * (1 + Math.cos(currentTime / 200) / 40);
-                this.sprite.h = this.h * (1 + Math.sin(currentTime / 200) / 40)
+                this.sprite.w = this.w * (1 + Math.cos(currentTime / 200) / 40) * this.naturalScale.x;
+                this.sprite.h = this.h * (1 + Math.sin(currentTime / 200) / 40) * this.naturalScale.y;
+
+                this.swingVelocity += (this.targetSwingAngle - this.currentSwingAngle) * 0.1;
+                this.swingVelocity *= 0.65;
+                this.currentSwingAngle += this.swingVelocity;
+                if (Math.abs(this.swingVelocity) < 0.000001) {
+                        this.targetSwingAngle = 0;
+                }
         }
 
         render() {
@@ -191,34 +232,97 @@ export class Character extends Entity2D {
                 const handWidth = this.sprite.w / 3;
                 const handHeight = this.sprite.h / 3;
 
-                const shoulderOffsetX_left = -this.sprite.w * 0.6;
-                const shoulderOffsetX_right = this.sprite.w * 0.2;
-                const shoulderOffsetY = this.sprite.h * -0.3;
+                const shoulderOffsetX_left = this.sprite.w / 2.5;
+                const shoulderOffsetX_right = -this.sprite.w / 2.5;
+                const shoulderOffsetY = this.sprite.h / -4;
 
-                const handShoulderDistance = this.sprite.w / 3;
+                const handShoulderDistance = this.sprite.w / 2;
                 const armAngleRange = this.state === State.RUNNING ? Math.PI / 3 : Math.PI / 30;
-                const armAngle_left = Math.sin((currentTime / 200)) * armAngleRange;
-                const armAngle_right = Math.sin((currentTime / 200) + Math.PI) * armAngleRange;
+                const armAngle_left = Math.sin((currentTime / 200) + Math.PI) * armAngleRange;
+                const armAngle_right = Math.sin((currentTime / 200)) * armAngleRange;
 
                 // I need to make the image big enough to contain the whole character sprite
-                const BUFFER_WIDTH = 100;
-                const BUFFER_HEIGHT = 100;
+                const BUFFER_WIDTH = 200;
+                const BUFFER_HEIGHT = 200;
 
                 const deadzone = this.sprite.w / 2;
                 const distance = this.canvas.cursor.x - this.sprite.x;
                 if (Math.abs(distance) > deadzone) {
-                        this.direction = distance < 0 ? Direction.LEFT : Direction.RIGHT;
+                        const direction = distance < 0 ? Direction.LEFT : Direction.RIGHT;
+                        if (direction != this.direction) {
+                                this.naturalScale.x += 0.05;
+                                this.naturalScale.y += 0.05;
+                        }
+
+                        this.direction = direction;
                 }
+
+                // TODO: Add effects to the sword swing
 
                 const outlined = this.canvas.outliner.process(BUFFER_WIDTH, BUFFER_HEIGHT, this.outlineColor, this.outlineThickness, context => {
                         const renderLeftHand = () => {
+                                if (this.direction === Direction.RIGHT) {
+                                        const swingAngle = this.currentSwingAngle * Math.PI / 180;
+                                        const swordWidth = this.sprite.w / 2;
+                                        const swordHeight = this.sprite.h;
+                                        const swordOffsetX = 0;
+                                        const swordOffsetY = -15;
+
+                                        const cursorAngle = Math.atan2(
+                                                this.canvas.cursor.y - this.sprite.y,
+                                                this.canvas.cursor.x - this.sprite.x
+                                        );
+
+                                        const handX = 0 * Math.cos(armAngle_left + Math.PI / 2);
+                                        const handY = 0 * Math.sin(armAngle_left + Math.PI / 2);
+
+                                        const leftArmAdvanceAngle = cursorAngle - Math.PI / 2;
+                                        const handOffsetX = Math.cos(leftArmAdvanceAngle) * handShoulderDistance;
+                                        const handOffsetY = Math.sin(leftArmAdvanceAngle) * handShoulderDistance;
+
+                                        context.save();
+                                        context.translate(shoulderOffsetX_left, shoulderOffsetY); // Origin is at shoulder
+
+                                        context.translate(handX, handY);
+
+                                        context.rotate(cursorAngle + swingAngle); // rotate the arm by the swing angle
+
+                                        context.translate(handOffsetX, handOffsetY);
+
+                                        context.rotate(swingAngle - Math.PI / 2); // rotate the wrist by the swing angle
+
+                                        context.drawImage(
+                                                this.sword!,
+                                                -swordWidth / 2 + swordOffsetX,
+                                                -swordHeight / 2 + swordOffsetY,
+                                                swordWidth,
+                                                swordHeight
+                                        );
+
+                                        context.drawImage(
+                                                this.hand.image!,
+                                                -handWidth / 2,
+                                                -handHeight / 2,
+                                                handWidth,
+                                                handHeight
+                                        );
+
+                                        context.restore();
+                                        return;
+                                }
+
                                 context.save();
                                 context.translate(shoulderOffsetX_left, shoulderOffsetY); // Origin is at shoulder
 
+                                const freeHandX = handShoulderDistance * Math.cos(armAngle_left + Math.PI / 2);
+                                const freeHandY = handShoulderDistance * Math.sin(armAngle_left + Math.PI / 2);
+
+                                context.translate(freeHandX, freeHandY);
+
                                 context.drawImage(
                                         this.hand.image!,
-                                        handShoulderDistance * Math.cos(armAngle_left + Math.PI / 2),
-                                        handShoulderDistance * Math.sin(armAngle_left + Math.PI / 2),
+                                        -handWidth / 2,
+                                        -handHeight / 2,
                                         handWidth,
                                         handHeight
                                 );
@@ -227,13 +331,68 @@ export class Character extends Entity2D {
                         };
 
                         const renderRightHand = () => {
+                                if (this.direction === Direction.LEFT) {
+                                        const swingAngle = -this.currentSwingAngle * Math.PI / 180;
+                                        const swordWidth = this.sprite.w / 2;
+                                        const swordHeight = this.sprite.h;
+                                        const swordOffsetX = 0;
+                                        const swordOffsetY = -15;
+
+                                        const cursorAngle = Math.atan2(
+                                                this.canvas.cursor.y - this.sprite.y,
+                                                this.canvas.cursor.x - this.sprite.x
+                                        );
+
+                                        const handX = 0 * Math.cos(armAngle_right + Math.PI / 2);
+                                        const handY = 0 * Math.sin(armAngle_right + Math.PI / 2);
+
+                                        const leftArmAdvanceAngle = cursorAngle - Math.PI / 2;
+                                        const handOffsetX = Math.cos(leftArmAdvanceAngle) * handShoulderDistance;
+                                        const handOffsetY = Math.sin(leftArmAdvanceAngle) * handShoulderDistance;
+
+                                        context.save();
+                                        context.translate(shoulderOffsetX_right, shoulderOffsetY); // Origin is at shoulder
+
+                                        context.translate(handX, handY);
+
+                                        context.rotate(cursorAngle + swingAngle); // rotate the arm by the swing angle
+
+                                        context.translate(handOffsetX, handOffsetY);
+
+                                        context.rotate(swingAngle - Math.PI / 2); // rotate the wrist by the swing angle
+
+                                        context.drawImage(
+                                                this.sword!,
+                                                -swordWidth / 2 + swordOffsetX,
+                                                -swordHeight / 2 + swordOffsetY,
+                                                swordWidth,
+                                                swordHeight
+                                        );
+
+                                        context.drawImage(
+                                                this.hand.image!,
+                                                -handWidth / 2,
+                                                -handHeight / 2,
+                                                handWidth,
+                                                handHeight
+                                        );
+
+                                        context.restore();
+                                        return;
+                                }
+
                                 context.save();
                                 context.translate(shoulderOffsetX_right, shoulderOffsetY); // Origin is at shoulder
 
+                                const handX = handShoulderDistance * Math.cos(armAngle_right + Math.PI / 2);
+                                const handY = handShoulderDistance * Math.sin(armAngle_right + Math.PI / 2);
+
+                                context.translate(handX, handY);
+
                                 context.drawImage(
                                         this.hand.image!,
-                                        handShoulderDistance * Math.cos(armAngle_right + Math.PI / 2),
-                                        handShoulderDistance * Math.sin(armAngle_right + Math.PI / 2),
+                                        -handWidth / 2,
+                                        -handHeight / 2,
                                         handWidth,
                                         handHeight
                                 );
@@ -242,9 +401,9 @@ export class Character extends Entity2D {
                         };
 
                         if (this.direction === Direction.RIGHT) {
-                                renderRightHand();
-                        } else {
                                 renderLeftHand();
+                        } else {
+                                renderRightHand();
                         }
 
                         context.drawImage(
@@ -278,9 +437,9 @@ export class Character extends Entity2D {
                         );
 
                         if (this.direction === Direction.RIGHT) {
-                                renderLeftHand();
-                        } else {
                                 renderRightHand();
+                        } else {
+                                renderLeftHand();
                         }
                 });
 
