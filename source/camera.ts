@@ -15,8 +15,6 @@ export class Camera2D extends Vector2D {
         private shakeThreshold: number = 0.1;
         private shakeDecay: number = 0.2;
 
-        private mouse: Vector2D;
-
         constructor(private canvas: Canvas2D) {
                 super(0, 0);
 
@@ -24,12 +22,6 @@ export class Camera2D extends Vector2D {
                 this.target = Vector2D.zero();
 
                 this.drag = new Vector2D(0.1, 0.25);
-
-                this.mouse = Vector2D.zero();
-                window.addEventListener("mousemove", event => {
-                        this.mouse.x = event.clientX - this.canvas.bounds.left;
-                        this.mouse.y = event.clientY - this.canvas.bounds.top;
-                });
         }
 
         update(deltaTime: number) {
@@ -44,8 +36,8 @@ export class Camera2D extends Vector2D {
                 this.current.x += (this.target.x - this.current.x) * this.speed * deltaTime;
                 this.current.y += (this.target.y - this.current.y) * this.speed * deltaTime;
 
-                const panningX = this.panning * this.mouse.x / (-this.canvas.width / 2);
-                const panningY = this.panning * this.mouse.y / (-this.canvas.height / 2);
+                const panningX = this.panning * this.canvas.cursor.x / (-this.canvas.width / 2);
+                const panningY = this.panning * this.canvas.cursor.y / (-this.canvas.height / 2);
                 const shakeX = Math.cos(this.shakeDirection) * this.shakePower;
                 const shakeY = Math.sin(this.shakeDirection) * this.shakePower;
                 this.x = this.current.x + panningX + shakeX;
