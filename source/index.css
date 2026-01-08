@@ -1,27 +1,8 @@
-:root {
-        --opacity-1: 0.87;
-        --opacity-2: 0.60;
-        --opacity-3: 0.38;
-        --foreground-color-1: rgba(255, 255, 255, var(--opacity-1));
-        --foreground-color-2: rgba(255, 255, 255, var(--opacity-2));
-        --foreground-color-3: rgba(255, 255, 255, var(--opacity-3));
-        --title-size: clamp(16px, 2vw, 32px);
-        --body-size: clamp(12px, 1.5vw, 20px);
-        --large-spacing: clamp(32px, 4.5vw, 56px);
-        --medium-spacing: clamp(20px, 2.5vw, 32px);
-        --small-spacing: clamp(8px, 1vw, 12px);
-        --tiny-spacing: clamp(4px, 0.5vw, 6px);
-        --input-height: clamp(24px, 3vw, 36px);
-        --light-background-color: rgba(255, 255, 255, 0.1);
-        --lighter-background-color: rgba(255, 255, 255, 0.2);
-        --lightest-background-color: rgba(255, 255, 255, 0.5);
-        --dark-background-color: rgba(0, 0, 0, 0.2);
-        --darker-background-color: rgba(0, 0, 0, 0.5);
-        --darkest-background-color: rgba(0, 0, 0, 0.9);
-        --large-radius: 5px;
-        --medium-radius: 2px;
-        --small-radius: 1px;
-}
+@import "./variables.css";
+@import "./elements/slider.css";
+@import "./elements/dropdown.css";
+@import "./elements/color_picker.css";
+@import "./external.css";
 
 ::-webkit-scrollbar {
         width: 10px;
@@ -67,15 +48,6 @@ input, textarea, select, button {
         appearance: none;
         flex-shrink: 0;
         color: inherit;
-}
-
-#starfield {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 0;
 }
 
 main {
@@ -256,95 +228,4 @@ main.editing > #canvas {
         width: 50%;
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
-}
-
-.tippy-box {
-        font-family: "Monaspace Radon", monospace;
-        font-size: var(--body-size);
-}
-
-.dropdown {
-        width: 100%;
-        position: relative;
-        margin-bottom: var(--medium-spacing);
-}
-
-.dropdown > button {
-        width: 100%;
-        text-align: left;
-}
-
-.dropdown > ul {
-        display: none;
-        list-style: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        background-color: var(--darkest-background-color);
-        border-left: 1px solid var(--lighter-background-color);
-        border-right: 1px solid var(--lighter-background-color);
-        border-bottom: 1px solid var(--lighter-background-color);
-        border-bottom-left-radius: var(--medium-radius);
-        border-bottom-right-radius: var(--medium-radius);
-        max-height: 200px;
-        overflow-y: auto;
-        z-index: 999;
-}
-
-.dropdown > ul > li {
-        padding: var(--tiny-spacing) var(--small-spacing);
-        transition: background-color 100ms ease-out;
-        background-color: transparent;
-        cursor: pointer;
-}
-
-.dropdown > ul > li:hover {
-        background-color: var(--lighter-background-color);
-}
-
-.color-picker {
-        display: flex;
-        flex-direction: column;
-        border-radius: var(--medium-radius);
-        padding: var(--small-spacing) var(--medium-spacing);
-        background-color: var(--light-background-color);
-        margin-bottom: var(--medium-spacing);
-}
-
-.color-picker > label {
-        margin-bottom: var(--small-spacing);
-}
-
-.color-picker > .presets {
-        display: grid;
-        gap: var(--small-spacing);
-        margin-bottom: var(--small-spacing);
-        grid-template-columns: repeat(auto-fill, var(--medium-spacing));
-        justify-content: space-between;
-}
-
-.color-picker > .presets > button {
-        border-radius: var(--large-radius);
-        width: var(--medium-spacing);
-        height: var(--medium-spacing);
-        padding: 0;
-        margin: 0;
-}
-
-.color-picker > .sliders {
-        display: grid;
-        grid-template-columns: max-content 1fr max-content;
-        column-gap: var(--small-spacing);
-        align-items: center;
-}
-
-.color-picker > .sliders > input[type="range"] {
-        margin: 0;
-}
-
-.color-picker > .sliders > span {
-        white-space-collapse: preserve;
 }

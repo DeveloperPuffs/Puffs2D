@@ -36,7 +36,7 @@
                                                 <div id="general-content" class="step">
                                                         <div class="title">General Information</div>
                                                         <div class="scroller">
-                                                                <label for="name-input">Name:</label>
+                                                                <label for="name-input">Name</label>
                                                                 <input
                                                                         id="name-input"
                                                                         type="text"
@@ -44,19 +44,14 @@
                                                                         placeholder="PlasmaPuffs"
                                                                         spellcheck="false"
                                                                 >
-                                                                <label>Pronouns:</label>
-                                                                <div class="dropdown">
-                                                                        <input type="hidden" name="pronouns" value="unspecified">
-                                                                        <button>Unspecified</button>
-                                                                        <ul>
-                                                                                <li data-value="he-him">He / Him</li>
-                                                                                <li data-value="she-her">She / Her</li>
-                                                                                <li data-value="they-them">They / Them</li>
-                                                                                <li data-value="it-its">It / Its</li>
-                                                                                <li data-value="unspecified">Unspecified</li>
-                                                                        </ul>
-                                                                </div>
-                                                                <label for="notes-input">Additional Notes:</label>
+                                                                <dropdown-element label="Pronouns" value="Unspecified">
+                                                                        He / Him,
+                                                                        She / Her,
+                                                                        They / Them,
+                                                                        It / Its,
+                                                                        Unspecified
+                                                                </dropdown-element>
+                                                                <label for="notes-input">Additional Notes</label>
                                                                 <textarea
                                                                         id="notes-input"
                                                                         name="notes-input"
@@ -124,7 +119,6 @@
                                                                         value="0.5"
                                                                         step="0.1"
                                                                 ></slider-element>
-                                                                <span>TODO: More options...</span><br>
                                                                 <button class="proceed">Proceed</button>
                                                         </div>
                                                 </div>
@@ -140,6 +134,20 @@
                         </div>
                         <canvas id="canvas"></canvas>
                 </main>
+                <template id="dropdown-template">
+                        <label></label>
+                        <div class="input">
+                                <button></button>
+                                <ul></ul>
+                        </div>
+                </template>
+                <template id="slider-template">
+                        <label></label>
+                        <div class="track">
+                                <div class="thumb"></div>
+                        </div>
+                        <span></span>
+                </template>
                 <script src="source/index.js" type="module" defer></script>
         </body>
 </html>

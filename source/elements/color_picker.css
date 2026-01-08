@@ -1,0 +1,45 @@
+@import "./../variables.css";
+
+.color-picker {
+        display: flex;
+        flex-direction: column;
+        border-radius: var(--medium-radius);
+        padding: var(--small-spacing) var(--medium-spacing);
+        background-color: var(--light-background-color);
+        margin-bottom: var(--medium-spacing);
+}
+
+.color-picker > label {
+        margin-bottom: var(--small-spacing);
+}
+
+.color-picker > .presets {
+        display: grid;
+        gap: var(--small-spacing);
+        margin-bottom: var(--small-spacing);
+        grid-template-columns: repeat(auto-fill, var(--medium-spacing));
+        justify-content: space-between;
+}
+
+.color-picker > .presets > button {
+        border-radius: var(--large-radius);
+        width: var(--medium-spacing);
+        height: var(--medium-spacing);
+        padding: 0;
+        margin: 0;
+}
+
+.color-picker > .sliders {
+        display: grid;
+        grid-template-columns: max-content 1fr max-content;
+        column-gap: var(--small-spacing);
+        align-items: center;
+}
+
+.color-picker > .sliders > input[type="range"] {
+        margin: 0;
+}
+
+.color-picker > .sliders > span {
+        white-space-collapse: preserve;
+}

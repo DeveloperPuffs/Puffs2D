@@ -1,33 +1,79 @@
-export function setupDropdowns() {
-        document.querySelectorAll<HTMLDivElement>(".dropdown").forEach(dropdown => {
-                const input = dropdown.querySelector<HTMLInputElement>("input")!;
-                const select = dropdown.querySelector<HTMLButtonElement>("button")!;
-                const list = dropdown.querySelector<HTMLUListElement>("ul")!;
+export class DropdownElement extends HTMLElement {
+        static define() {
+                customElements.define("dropdown-element", DropdownElement);
+        }
 
-                select.addEventListener("click", () => {
-                        list.style.display = list.style.display === "block" ? "none" : "block";
-                });
+        private label!: HTMLLabelElement;
+        private button!: HTMLButtonElement;
+        private list!: HTMLUListElement;
+        private options: string[] = [];
+        private _value: string = "";
 
-                list.querySelectorAll<HTMLLIElement>("li").forEach(option => {
-                        option.addEventListener("click", () => {
-                                select.textContent = option.textContent;
-                                list.style.display = "none";
+        get value() {
+                return this._value;
+        }
 
-                                const value = option.dataset.value;
-                                if (value !== undefined) {
-                                        input.value = value;
-                                }
+        set value(value: string) {
+                if (value === this.value) {
+                        return;
+                }
+
+                if (!this.options.includes(value)) {
+                        return;
+                }
+
+                this._value = value;
+                this.button.textContent = value;
+                this.dispatchEvent(new Event("change"));
+        }
+
+        constructor() {
+                super();
+        }
+
+        connectedCallback() {
+                this.options = (this.textContent ?? "")
+                        .split(",")
+                        .map(option => option.trim())
+                        .filter(option => option.length > 0);
+                this.textContent = "";
+
+                const template = document.querySelector<HTMLTemplateElement>("#dropdown-template")!;
+                this.append(template.content.cloneNode(true));
+
+                this.label = this.querySelector<HTMLLabelElement>("label")!;
+                this.button = this.querySelector<HTMLButtonElement>("button")!;
+                this.list = this.querySelector<HTMLUListElement>("ul")!;
+
+                this.label.textContent = this.getAttribute("label") ?? "";
+
+                for (const option of this.options) {
+                        const item = document.createElement("li");
+                        item.textContent = option;
+
+                        item.addEventListener("click", () => {
+                                this.value = option;
+                                this.list.style.display = "none";
                         });
+
+                        this.list.appendChild(item);
+                }
+
+                this.button.addEventListener("click", event => {
+                        event.stopPropagation();
+                        this.list.style.display = this.list.style.display === "block" ? "none" : "block";
                 });
 
-                document.addEventListener("click", event => {
-                        if (!(event.target instanceof Node)) {
-                                return;
-                        }
-
-                        if (!dropdown.contains(event.target)) {
-                                list.style.display = "none";
-                        }
+                document.addEventListener("click", () => {
+                        this.list.style.display = "none";
                 });
-        });
+
+                this.value = this.getAttribute("value")!;
+
+                const identifier = this.id || crypto.randomUUID();
+                this.id = "";
+
+                this.button.id = `${identifier}-button`;
+                this.label.htmlFor = this.button.id;
+        }
 }

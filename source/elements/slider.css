@@ -1,0 +1,32 @@
+@import "./../variables.css";
+
+slider-element {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        margin-bottom: var(--medium-spacing);
+        gap: var(--small-spacing);
+        user-select: none;
+}
+
+slider-element > .track {
+        position: relative;
+        height: var(--small-spacing);
+        background: var(--light-background-color);
+        border-radius: calc(var(--small-spacing) / 2);
+        cursor: pointer;
+}
+
+slider-element > .track > .thumb {
+        position: absolute;
+        top: 50%;
+        border-radius: 50%;
+        width: calc(var(--small-spacing) * 1.5);
+        height: calc(var(--small-spacing) * 1.5);
+        background: var(--lightest-background-color);
+        transform: translate(-50%, -50%);
+}
+
+slider-element > span {
+        text-align: right;
+}

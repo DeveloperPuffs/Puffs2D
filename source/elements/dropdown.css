@@ -1,0 +1,61 @@
+@import "./../variables.css";
+
+dropdown-element {
+        width: 100%;
+        margin-bottom: 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        margin-bottom: var(--medium-spacing);
+}
+
+dropdown-element[inline-label] {
+        grid-template-columns: auto 1fr;
+        column-gap: var(--small-spacing);
+        align-items: center;
+}
+
+dropdown-element[inline-label] > label {
+        margin-bottom: 0;
+}
+
+dropdown-element > .input {
+        position: relative;
+        width: 100%;
+}
+
+dropdown-element > .input > button {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 0 !important;
+}
+
+dropdown-element > .input > ul {
+        display: none;
+        list-style: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: var(--darkest-background-color);
+        border-left: 1px solid var(--lighter-background-color);
+        border-right: 1px solid var(--lighter-background-color);
+        border-bottom: 1px solid var(--lighter-background-color);
+        border-bottom-left-radius: var(--medium-radius);
+        border-bottom-right-radius: var(--medium-radius);
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 999;
+}
+
+dropdown-element > .input > ul > li {
+        padding: var(--tiny-spacing) var(--small-spacing);
+        transition: background-color 100ms ease-out;
+        background-color: transparent;
+        cursor: pointer;
+}
+
+dropdown-element > .input > ul > li:hover {
+        background-color: var(--lighter-background-color);
+}

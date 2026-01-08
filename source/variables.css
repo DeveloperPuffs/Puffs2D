@@ -1,0 +1,24 @@
+:root {
+        --opacity-1: 0.87;
+        --opacity-2: 0.60;
+        --opacity-3: 0.38;
+        --foreground-color-1: rgba(255, 255, 255, var(--opacity-1));
+        --foreground-color-2: rgba(255, 255, 255, var(--opacity-2));
+        --foreground-color-3: rgba(255, 255, 255, var(--opacity-3));
+        --title-size: clamp(16px, 2vw, 32px);
+        --body-size: clamp(12px, 1.5vw, 20px);
+        --large-spacing: clamp(32px, 4.5vw, 56px);
+        --medium-spacing: clamp(20px, 2.5vw, 32px);
+        --small-spacing: clamp(8px, 1vw, 12px);
+        --tiny-spacing: clamp(4px, 0.5vw, 6px);
+        --input-height: clamp(24px, 3vw, 36px);
+        --light-background-color: rgba(255, 255, 255, 0.1);
+        --lighter-background-color: rgba(255, 255, 255, 0.2);
+        --lightest-background-color: rgba(255, 255, 255, 0.5);
+        --dark-background-color: rgba(0, 0, 0, 0.2);
+        --darker-background-color: rgba(0, 0, 0, 0.5);
+        --darkest-background-color: rgba(0, 0, 0, 0.9);
+        --large-radius: 5px;
+        --medium-radius: 2px;
+        --small-radius: 1px;
+}

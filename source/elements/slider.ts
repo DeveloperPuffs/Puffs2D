@@ -1,4 +1,9 @@
 export class SliderElement extends HTMLElement {
+        static define() {
+                customElements.define("slider-element", SliderElement);
+        }
+
+        private label!: HTMLLabelElement;
         private track!: HTMLDivElement;
         private thumb!: HTMLDivElement;
         private mark!: HTMLSpanElement;
@@ -11,55 +16,15 @@ export class SliderElement extends HTMLElement {
         constructor() {
                 super();
 
-                const shadow = this.attachShadow({
-                        mode: "open"
-                });
+                const template = document.querySelector<HTMLTemplateElement>("#slider-template")!;
+                this.append(template.content.cloneNode(true));
+        }
 
-                shadow.innerHTML = `
-                        <style>
-                                :host {
-                                        display: grid;
-                                        grid-template-columns: auto 1fr auto;
-                                        align-items: center;
-                                        gap: 8px;
-                                        user-select: none;
-                                }
-
-                                .track {
-                                        position: relative;
-                                        height: 6px;
-                                        background: #444;
-                                        border-radius: 3px;
-                                        cursor: pointer;
-                                }
-
-                                .thumb {
-                                        position: absolute;
-                                        top: 50%;
-                                        width: 14px;
-                                        height: 14px;
-                                        background: white;
-                                        border-radius: 50%;
-                                        transform: translate(-50%, -50%);
-                                }
-
-                                .mark {
-                                        min-width: 3ch;
-                                        text-align: right;
-                                        font-family: monospace;
-                                }
-                        </style>
-                        <label class="label"></label>
-                        <div class="track">
-                                <div class="thumb"></div>
-                        </div>
-                        <span class="mark"></span>
-                `;
-
-                this.track = shadow.querySelector(".track")!;
-                this.thumb = shadow.querySelector(".thumb")!;
-                this.mark = shadow.querySelector(".mark")!;
-
+        connectedCallback() {
+                this.label = this.querySelector<HTMLLabelElement>("label")!;
+                this.track = this.querySelector<HTMLDivElement>(".track")!;
+                this.thumb = this.querySelector<HTMLDivElement>(".thumb")!;
+                this.mark = this.querySelector<HTMLSpanElement>("span")!;
                 this.track.addEventListener("pointerdown", this.handleClick);
                 this.attributeChangedCallback();
         }
@@ -90,14 +55,13 @@ export class SliderElement extends HTMLElement {
         }
 
         private refresh() {
+                this.label.textContent = this.getAttribute("label") ?? "";
+
                 const interpolation = (this._value - this.minimum) / (this.maximum - this.minimum);
                 this.thumb.style.left = `${interpolation * 100}%`;
 
                 const decimals = this.step <= 0 ? 0 : Math.max(0, -Math.floor(Math.log10(this.step)));
                 this.mark.textContent = this._value.toFixed(decimals);
-
-                const label = this.shadowRoot!.querySelector(".label")!;
-                label.textContent = this.getAttribute("label") ?? "";
         }
 
         private handleClick = (event: PointerEvent) => {
@@ -123,8 +87,4 @@ export class SliderElement extends HTMLElement {
                 const interpolation = (event.clientX - trackRectangle.left) / trackRectangle.width;
                 this.value = this.minimum + interpolation * (this.maximum - this.minimum);
         }
-}
-
-export function defineSliders() {
-        customElements.define("slider-element", SliderElement);
 }

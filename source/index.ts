@@ -1,7 +1,7 @@
 import "@fontsource/monaspace-neon";
 import "@fontsource/monaspace-argon";
 import "@fontsource/monaspace-radon";
-import "./styles/styles.css";
+import "./index.css";
 
 import Starfield from "./vendor/starfield.js/starfield.js";
 
@@ -33,13 +33,13 @@ tippy("[data-tippy-content]", {
         }
 });
 
-import { defineSliders } from "./elements/slider";
-import { setupDropdowns } from "./elements/dropdown";
+import { SliderElement } from "./elements/slider";
+import { DropdownElement } from "./elements/dropdown";
 import { setupColorPickers } from "./elements/color_picker";
 import { Canvas2D } from "./canvas";
 
-defineSliders();
-setupDropdowns();
+SliderElement.define();
+DropdownElement.define();
 setupColorPickers();
 
 window.addEventListener("contextmenu", event => {
