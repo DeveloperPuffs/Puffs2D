@@ -53,7 +53,7 @@ enum Step {
         GENERAL = "general",
         APPEARANCE = "appearance",
         ACCESSORIES = "accessories",
-        ATTACKS = "attacks",
+        WEAPONS = "weapons",
         EFFECTS = "effects",
         REVIEW = "review"
 }
@@ -62,7 +62,7 @@ const stepOrder = Object.freeze([
         Step.GENERAL,
         Step.APPEARANCE,
         Step.ACCESSORIES,
-        Step.ATTACKS,
+        Step.WEAPONS,
         Step.EFFECTS,
         Step.REVIEW
 ] as const);
@@ -129,9 +129,9 @@ document.querySelectorAll<HTMLButtonElement>("button.proceed").forEach(proceedBu
                         nextStep = Step.ACCESSORIES;
                         break;
                 case Step.ACCESSORIES:
-                        nextStep = Step.ATTACKS;
+                        nextStep = Step.WEAPONS;
                         break;
-                case Step.ATTACKS:
+                case Step.WEAPONS:
                         nextStep = Step.EFFECTS;
                         break;
                 case Step.EFFECTS:
