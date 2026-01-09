@@ -88,11 +88,11 @@ export class Character extends Entity2D {
 
                 const bodyColorPicker = document.querySelector<ColorPickerElement>("#body-color-picker")!;
                 bodyColorPicker.addEventListener("input", () => {
-                        const bodyPath = this.body.svg!.querySelector<SVGClipPathElement>("#colorable")!;
+                        const bodyPath = this.body.getSVG().querySelector<SVGClipPathElement>("#colorable")!;
                         bodyPath.style.fill = bodyColorPicker.color;
                         this.body.rasterize();
 
-                        const handPath = this.hand.svg!.querySelector<SVGClipPathElement>("#colorable")!;
+                        const handPath = this.hand.getSVG().querySelector<SVGClipPathElement>("#colorable")!;
                         handPath.style.fill = bodyColorPicker.color;
                         this.hand.rasterize();
                 });
@@ -238,7 +238,7 @@ export class Character extends Entity2D {
                         context.rotate(swingAngle - Math.PI / 2); // rotate the wrist by the swing angle
 
                         context.drawImage(
-                                this.sword!.image!,
+                                this.sword!.getImage(false),
                                 -swordWidth / 2 + swordOffsetX,
                                 -swordHeight / 2 + swordOffsetY,
                                 swordWidth,
@@ -249,7 +249,7 @@ export class Character extends Entity2D {
                         context.scale(this.wobble.x, this.wobble.y);
 
                         context.drawImage(
-                                this.hand!.image!,
+                                this.hand.getImage(false),
                                 -this.hand.width / 2,
                                 -this.hand.height / 2,
                                 this.hand.width,
@@ -276,7 +276,7 @@ export class Character extends Entity2D {
                 context.translate(freeHandX, freeHandY);
 
                 context.drawImage(
-                        this.hand.image!,
+                        this.hand.getImage(false),
                         -this.hand.width / 2,
                         -this.hand.height / 2,
                         this.hand.width,
@@ -297,7 +297,7 @@ export class Character extends Entity2D {
                 context.scale(this.wobble.x, this.wobble.y);
 
                 context.drawImage(
-                        this.body.image!,
+                        this.body.getImage(false),
                         -this.body.width / 2,
                         -this.body.height / 2,
                         this.body.width,
@@ -308,7 +308,7 @@ export class Character extends Entity2D {
                 const lookY = (this.canvas.cursor.y - this.y) / this.h;
 
                 context.drawImage(
-                        this.eyes.image!,
+                        this.eyes.getImage(false),
                         -this.eyes.width / 2 + lookX,
                         -this.eyes.height * this.eyesScale / 2 + lookY - this.body.height / 4,
                         this.eyes.width,
@@ -316,7 +316,7 @@ export class Character extends Entity2D {
                 );
 
                 context.drawImage(
-                        this.mouth.image!,
+                        this.mouth.getImage(false),
                         -this.mouth.width / 2 + lookX,
                         -this.mouth.height / 2 + lookY + this.body.width / 3,
                         this.mouth.width,
@@ -328,7 +328,7 @@ export class Character extends Entity2D {
                 context.save();
                 context.scale(this.direction === Direction.RIGHT ? -1 : 1, 1);
                 context.drawImage(
-                        this.hat!.image!,
+                        this.hat!.getImage(false),
                         -this.hat!.width / 2 - this.hand.width / 4,
                         -this.hat!.height / 2 - this.body.height / 2,
                         this.hat!.width,
