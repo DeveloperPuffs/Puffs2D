@@ -7,6 +7,7 @@
         --foreground-color-3: rgba(255, 255, 255, var(--opacity-3));
         --title-size: clamp(16px, 2vw, 32px);
         --body-size: clamp(12px, 1.5vw, 20px);
+        --image-size: clamp(40px, 5vw, 60px);
         --large-spacing: clamp(32px, 4.5vw, 56px);
         --medium-spacing: clamp(20px, 2.5vw, 32px);
         --small-spacing: clamp(8px, 1vw, 12px);

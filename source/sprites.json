@@ -1,0 +1,69 @@
+[
+        {
+                "name": "Body",
+                "path": "body.svg",
+                "width": 256,
+                "height": 256,
+                "resolution": 4,
+                "outline": false
+        },
+        {
+                "name": "Mouth",
+                "path": "mouth.svg",
+                "width": 50,
+                "height": 25,
+                "resolution": 4,
+                "outline": false
+        },
+        {
+                "name": "Hand",
+                "path": "hand.svg",
+                "width": 256,
+                "height": 256,
+                "resolution": 4,
+                "outline": false
+        },
+
+        {
+                "name": "Eyes",
+                "path": "eyes.svg",
+                "width": 160,
+                "height": 120,
+                "resolution": 4,
+                "outline": false
+        },
+
+        {
+                "name": "Sword",
+                "path": "sword.svg",
+                "width": 256,
+                "height": 256,
+                "resolution": 4,
+                "outline": true
+        },
+
+        {
+                "name": "Top Hat",
+                "path": "top_hat.svg",
+                "width": 256,
+                "height": 256,
+                "resolution": 4,
+                "outline": true
+        },
+        {
+                "name": "Baseball Cap",
+                "path": "baseball_cap.svg",
+                "width": 256,
+                "height": 256,
+                "resolution": 4,
+                "outline": true
+        },
+        {
+                "name": "Propeller Hat",
+                "path": "propeller_hat.svg",
+                "width": 256,
+                "height": 256,
+                "resolution": 4,
+                "outline": true
+        }
+]

@@ -47,11 +47,12 @@ export class SliderElement extends LabeledElement {
                                 window.removeEventListener("pointermove", moveHandler);
                                 window.removeEventListener("pointerup", releaseHandler);
                                 this.classList.remove("dragging");
+
+                                this.dispatchEvent(new Event("change"));
                         };
 
                         window.addEventListener("pointermove", moveHandler);
                         window.addEventListener("pointerup", releaseHandler);
-                        this.dispatchEvent(new Event("change"));
                 });
 
                 this._value = Number(this.getAttribute("value") ?? this._value);
@@ -100,8 +101,17 @@ export class SliderElement extends LabeledElement {
                 this.updateValue(value, true);
         }
 
+        private snapValue(value: number) {
+                const steps = Math.round((value - this.minimum) / this.step);
+                const snapped = this.minimum + steps * this.step;
+
+                const decimals = this.countDecimals();
+                return Number(snapped.toFixed(decimals));
+        }
+
         private updateValue(value: number, setAttribute: boolean) {
-                const clamped = Math.min(this.maximum, Math.max(this.minimum, value));
+                const snapped = this.snapValue(value);
+                const clamped = Math.min(this.maximum, Math.max(this.minimum, snapped));
                 if (clamped === this._value) {
                         return;
                 }

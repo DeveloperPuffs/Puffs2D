@@ -1,6 +1,6 @@
 <svg width="256" height="256" viewBox="0 0 256 256" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
         <path
-                id="body"
+                id="colorable"
                 style="display:inline;fill:#fae196;fill-opacity:1;stroke:#000;stroke-width:5.00001;stroke-dasharray:none;stroke-opacity:1"
                 d="M62.044 178.885c142.962 42.156 168.471-112.797 47.32-162.9C88.7 7.438 65.34 18.312 46.82 37.966 8.269 78.881-9.314 157.844 62.044 178.885Z"
                 transform="translate(-15.2 -14.688)scale(1.43319)"

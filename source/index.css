@@ -3,7 +3,6 @@
 @import "./elements/slider.css";
 @import "./elements/dropdown.css";
 @import "./elements/color_picker.css";
-@import "./external.css";
 
 ::-webkit-scrollbar {
         width: 10px;
@@ -243,4 +242,26 @@ main.editing > #canvas {
         width: 50%;
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
+}
+
+.image-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(var(--image-size), auto));
+        justify-content: start;
+        gap: var(--small-spacing);
+        margin-bottom: var(--medium-spacing);
+}
+
+.image-grid > img {
+        background-color: var(--light-background-color);
+        border-radius: var(--medium-radius);
+        padding: var(--small-spacing);
+        width: var(--image-size);
+        height: var(--image-size);
+        user-select: none;
+        cursor: pointer;
+}
+
+.image-grid > img:hover {
+        background-color: var(--lighter-background-color);
 }

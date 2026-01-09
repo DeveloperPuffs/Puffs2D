@@ -51,9 +51,7 @@ export class Canvas2D {
                 });
         }
 
-        async load() {
-                await this.player.load();
-
+        startRunning() {
                 const animationFrame = (timestamp: number) => {
                         this.animate(timestamp);
                         window.requestAnimationFrame(animationFrame);

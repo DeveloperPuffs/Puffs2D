@@ -42,12 +42,16 @@ SliderElement.define();
 DropdownElement.define();
 ColorPickerElement.define();
 
-window.addEventListener("contextmenu", event => {
-        event.preventDefault();
-});
+import { loadTextures } from "./textures";
+
+await loadTextures();
+
+// window.addEventListener("contextmenu", event => {
+//         event.preventDefault();
+// });
 
 const canvas = new Canvas2D();
-await canvas.load();
+canvas.startRunning();
 
 enum Step {
         GENERAL = "general",
