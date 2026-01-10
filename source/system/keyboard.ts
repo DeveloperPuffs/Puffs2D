@@ -22,7 +22,7 @@ export class Keyboard {
                 });
 
                 window.addEventListener("keyup", event => {
-                        if (this.keys.has(event.code)) {
+                        if (!this.keys.has(event.code)) {
                                 return;
                         }
 
@@ -33,10 +33,28 @@ export class Keyboard {
                                 callbacks.forEach(callback => callback(event.code));
                         }
                 });
+
+                window.addEventListener("blur", this.clearKeys);
+                document.addEventListener("visibilitychange", () => {
+                        if (document.visibilityState === "hidden") {
+                                this.clearKeys();
+                        }
+                });
+        }
+
+        private clearKeys = () => {
+                for (const key of this.keys) {
+                        const callbacks = this.keyReleaseCallbacks.get(key);
+                        if (callbacks !== undefined) {
+                                callbacks.forEach(callback => callback(key));
+                        }
+                }
+
+                this.keys.clear();
         }
 
         checkKey(keys: string): boolean {
-                return this.parseKeys(keys).some(key => !!this.keys.has(key));
+                return this.parseKeys(keys).some(key => this.keys.has(key));
         }
 
         onKeyPress(keys: string, callback: (key: string) => void) {
