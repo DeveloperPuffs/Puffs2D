@@ -22,6 +22,14 @@
         },
 
         {
+                "name": "No Weapon",
+                "path": "weapons/no_weapon.svg",
+                "outline": false,
+                "metadata": {
+                        "type": "none"
+                }
+        },
+        {
                 "name": "Sword",
                 "path": "weapons/sword.svg",
                 "outline": true,

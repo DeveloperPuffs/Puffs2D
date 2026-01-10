@@ -229,10 +229,7 @@ export class Character extends Entity2D {
 
                 context.rotate(swingAngle - Math.PI / 2); // rotate the wrist by the swing angle
 
-                context.scale(
-                        this.weaponScale.x,
-                        this.weaponScale.y
-                );
+                context.scale(this.weaponScale.x, this.weaponScale.y);
 
                 context.drawImage(
                         this.weapon.getImage(false),
@@ -281,10 +278,7 @@ export class Character extends Entity2D {
 
                 context.translate(handOffsetX, handOffsetY);
 
-                context.scale(
-                        this.weaponScale.x,
-                        this.weaponScale.y
-                );
+                context.scale(this.weaponScale.x, this.weaponScale.y);
 
                 context.drawImage(
                         this.weapon.getImage(false),
@@ -314,13 +308,15 @@ export class Character extends Entity2D {
 
                 if (this.direction !== direction) {
                         const metadata = this.weapon.getMetadata();
-                        switch (metadata.behavior) {
-                                case "sword":
-                                        this.renderSword(context, direction);
-                                        return;
-                                case "spear":
-                                        this.renderSpear(context, direction);
-                                        return;
+                        if (metadata.type === "weapon") {
+                                switch (metadata.behavior!) {
+                                        case "sword":
+                                                this.renderSword(context, direction);
+                                                return;
+                                        case "spear":
+                                                this.renderSpear(context, direction);
+                                                return;
+                                }
                         }
                 }
 
