@@ -410,12 +410,12 @@ export class Character extends Entity2D {
                 this.renderCharacter(context);
 
                 if (this.name !== "") {
-                        context.font = "14px \"Monaspace Radon\", monospace";
+                        context.font = `${this.w}px \"Monaspace Radon\", monospace`;
 
                         const label = this.name.length <= 20 ? this.name : this.name.substring(0, 19) + "…";
                         const metrics = context.measureText(label);
 
-                        context.lineWidth = 2;
+                        context.lineWidth = this.w / 2;
                         context.strokeStyle = "black";
                         context.strokeText(label, metrics.width / -2, -this.body.height / 2);
 

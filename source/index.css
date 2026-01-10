@@ -1,5 +1,6 @@
 @import "./variables.css";
 @import "./elements/labeled.css";
+@import "./elements/toggle.css";
 @import "./elements/slider.css";
 @import "./elements/dropdown.css";
 @import "./elements/color_picker.css";

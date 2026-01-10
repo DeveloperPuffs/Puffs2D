@@ -36,20 +36,25 @@ import { loadTextures } from "./textures";
 
 await loadTextures();
 
+import { ToggleElement } from "./elements/toggle";
 import { SliderElement } from "./elements/slider";
 import { DropdownElement } from "./elements/dropdown";
 import { ColorPickerElement } from "./elements/color_picker";
 import { SpriteSelectorElement } from "./elements/sprite_selector";
 import { Canvas2D } from "./canvas";
 
+ToggleElement.define();
 SliderElement.define();
 DropdownElement.define();
 ColorPickerElement.define();
 SpriteSelectorElement.define();
 
-// window.addEventListener("contextmenu", event => {
-//         event.preventDefault();
-// });
+if (import.meta.env.DEV) {
+        // Disable right clicking to open the context menu only in the build
+        window.addEventListener("contextmenu", event => {
+                event.preventDefault();
+        });
+}
 
 const canvas = new Canvas2D();
 canvas.startRunning();
@@ -59,7 +64,7 @@ enum Step {
         APPEARANCE = "appearance",
         ACCESSORIES = "accessories",
         WEAPONS = "weapons",
-        EFFECTS = "effects",
+        OPTIONS = "options",
         REVIEW = "review"
 }
 
@@ -68,7 +73,7 @@ const stepOrder = Object.freeze([
         Step.APPEARANCE,
         Step.ACCESSORIES,
         Step.WEAPONS,
-        Step.EFFECTS,
+        Step.OPTIONS,
         Step.REVIEW
 ] as const);
 
@@ -137,9 +142,9 @@ document.querySelectorAll<HTMLButtonElement>("button.proceed").forEach(proceedBu
                         nextStep = Step.WEAPONS;
                         break;
                 case Step.WEAPONS:
-                        nextStep = Step.EFFECTS;
+                        nextStep = Step.OPTIONS;
                         break;
-                case Step.EFFECTS:
+                case Step.OPTIONS:
                         nextStep = Step.REVIEW;
                         break;
                 case Step.REVIEW:
