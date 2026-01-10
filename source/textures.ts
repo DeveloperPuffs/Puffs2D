@@ -5,7 +5,7 @@ import { ColorPickerElement } from "./elements/color_picker";
 import spritesData from "./sprites.json";
 
 export type Metadata = {
-        type: "none" | "hat" | "weapon";
+        type: "none" | "headwear" | "weapon";
         behavior?: string;
         offset?: {
                 x: number;

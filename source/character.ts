@@ -44,8 +44,8 @@ export class Character extends Entity2D {
         private targetSwingAngle: number = 0;
         private swingVelocity: number = 0;
 
-        private hat: Texture;
-        private hatScale: Vector2D = new Vector2D(1, 1);
+        private headwear: Texture;
+        private headwearScale: Vector2D = new Vector2D(1, 1);
 
         constructor(private canvas: Canvas2D) {
                 super(0, 0, Character.WIDTH, Character.HEIGHT);
@@ -98,14 +98,14 @@ export class Character extends Entity2D {
                         this.canvas.camera.shake(10);
                 });
 
-                const hatSelector = document.querySelector<SpriteSelectorElement>("#hat-selector")!;
-                hatSelector.addEventListener("change", () => {
-                        this.hat = hatSelector.sprite;
-                        this.hatScale.x += 0.1;
-                        this.hatScale.y += 0.1;
+                const headwearSelector = document.querySelector<SpriteSelectorElement>("#headwear-selector")!;
+                headwearSelector.addEventListener("change", () => {
+                        this.headwear = headwearSelector.sprite;
+                        this.headwearScale.x += 0.1;
+                        this.headwearScale.y += 0.1;
                 });
 
-                this.hat = hatSelector.sprite;
+                this.headwear = headwearSelector.sprite;
 
                 const weaponSelector = document.querySelector<SpriteSelectorElement>("#weapon-selector")!;
                 weaponSelector.addEventListener("change", () => {
@@ -163,8 +163,8 @@ export class Character extends Entity2D {
                 this.scale.x += (1 - this.scale.x) * 0.1;
                 this.scale.y += (1 - this.scale.y) * 0.1;
 
-                this.hatScale.x += (1 - this.hatScale.x) * 0.1;
-                this.hatScale.y += (1 - this.hatScale.y) * 0.1;
+                this.headwearScale.x += (1 - this.headwearScale.x) * 0.1;
+                this.headwearScale.y += (1 - this.headwearScale.y) * 0.1;
 
                 this.weaponScale.x += (1 - this.weaponScale.x) * 0.1;
                 this.weaponScale.y += (1 - this.weaponScale.y) * 0.1;
@@ -270,9 +270,9 @@ export class Character extends Entity2D {
                         this.canvas.cursor.x - this.x
                 );
 
-                const leftArmAdvanceAngle = cursorAngle + Math.PI / 2 * (direction === Direction.LEFT ? -1 : 1);
-                const handOffsetX = Math.cos(leftArmAdvanceAngle) * handShoulderDistance;
-                const handOffsetY = Math.sin(leftArmAdvanceAngle) * handShoulderDistance;
+                const armAdvanceAngle = cursorAngle + Math.PI / 2 * (direction === Direction.LEFT ? -1 : 1);
+                const handOffsetX = Math.cos(armAdvanceAngle) * handShoulderDistance;
+                const handOffsetY = Math.sin(armAdvanceAngle) * handShoulderDistance;
 
                 context.save();
                 context.translate(shoulderOffsetX, shoulderOffsetY); // Origin is at shoulder
@@ -388,20 +388,20 @@ export class Character extends Entity2D {
 
                 context.restore();
 
-                const hatMetadata = this.hat.getMetadata();
-                if (hatMetadata.type !== "none") {
+                const headwearMetadata = this.headwear.getMetadata();
+                if (headwearMetadata.type === "headwear") {
                         context.save();
                         context.scale(
-                                this.hatScale.x * (this.direction === Direction.RIGHT ? -1 : 1),
-                                this.hatScale.y
+                                this.headwearScale.x * (this.direction === Direction.RIGHT ? -1 : 1),
+                                this.headwearScale.y
                         );
 
                         context.drawImage(
-                                this.hat.getImage(false),
-                                -this.hat.width / 2 + hatMetadata.offset!.x,
-                                -this.hat.height / 2 - this.body.height / 2 + hatMetadata.offset!.y,
-                                this.hat.width,
-                                this.hat.height
+                                this.headwear.getImage(false),
+                                -this.headwear.width / 2 + headwearMetadata.offset!.x,
+                                -this.headwear.height / 2 - this.body.height / 2 + headwearMetadata.offset!.y,
+                                this.headwear.width,
+                                this.headwear.height
                         );
                         context.restore();
                 }
