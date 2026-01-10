@@ -4,16 +4,16 @@ export class Background {
         constructor(private canvas: Canvas2D) {
         }
 
-        render() {
+        render(context: CanvasRenderingContext2D) {
                 const alpha1 = "0.07";
                 const alpha2 = "0.02";
                 const gridSize = 25;
 
-                this.canvas.context.save();
-                this.canvas.context.translate(this.canvas.camera.x, this.canvas.camera.y);
-                this.canvas.context.rotate(-(5 * Math.PI) / 180);
-                this.canvas.context.translate(-this.canvas.camera.x, -this.canvas.camera.y);
-                this.canvas.context.lineWidth = 2;
+                context.save();
+                context.translate(this.canvas.camera.x, this.canvas.camera.y);
+                context.rotate(-(5 * Math.PI) / 180);
+                context.translate(-this.canvas.camera.x, -this.canvas.camera.y);
+                context.lineWidth = 2;
 
                 const diagonal = Math.sqrt(
                         this.canvas.width * this.canvas.width +
@@ -30,26 +30,26 @@ export class Background {
 
                 let startIndexX = Math.floor(startX / gridSize);
                 for (let x = startX; x <= right; x += gridSize) {
-                        this.canvas.context.strokeStyle = (startIndexX++) % 5 === 0
+                        context.strokeStyle = (startIndexX++) % 5 === 0
                                 ? `rgba(255,255,255,${alpha1})`
                                 : `rgba(255,255,255,${alpha2})`;
-                        this.canvas.context.beginPath();
-                        this.canvas.context.moveTo(x, top);
-                        this.canvas.context.lineTo(x, bottom);
-                        this.canvas.context.stroke();
+                        context.beginPath();
+                        context.moveTo(x, top);
+                        context.lineTo(x, bottom);
+                        context.stroke();
                 }
 
                 let startIndexY = Math.floor(startY / gridSize);
                 for (let y = startY; y <= bottom; y += gridSize) {
-                        this.canvas.context.strokeStyle = (startIndexY++) % 5 === 0
+                        context.strokeStyle = (startIndexY++) % 5 === 0
                                 ? `rgba(255,255,255,${alpha1})`
                                 : `rgba(255,255,255,${alpha2})`;
-                        this.canvas.context.beginPath();
-                        this.canvas.context.moveTo(left, y);
-                        this.canvas.context.lineTo(right, y);
-                        this.canvas.context.stroke();
+                        context.beginPath();
+                        context.moveTo(left, y);
+                        context.lineTo(right, y);
+                        context.stroke();
                 }
 
-                this.canvas.context.restore();
+                context.restore();
         }
 }

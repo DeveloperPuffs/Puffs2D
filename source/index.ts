@@ -1,7 +1,6 @@
 import "@fontsource/monaspace-neon";
 import "@fontsource/monaspace-argon";
 import "@fontsource/monaspace-radon";
-import "./index.css";
 
 import Starfield from "./vendor/starfield.js/starfield.js";
 
