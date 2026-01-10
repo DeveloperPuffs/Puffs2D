@@ -6,13 +6,8 @@ export class SpriteSelectorElement extends HTMLElement {
                 customElements.define("sprite-selector-element", SpriteSelectorElement);
         }
 
-        private sprites: Map<string, Texture>;
+        private sprites: Map<string, Texture> = new Map();
         private _sprite!: Texture;
-
-        constructor() {
-                super();
-                this.sprites = new Map();
-        }
 
         get sprite() {
                 return this._sprite;

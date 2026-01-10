@@ -9,5 +9,6 @@
 - Custom cursor
 - Allow switching models for color pickers
 - Add custom fields/inputs to the color picker
+- Add functions to help with vector math
 
 - Background music switcher

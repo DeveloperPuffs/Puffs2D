@@ -7,19 +7,10 @@ export class SliderElement extends HTMLElement {
         private thumb!: HTMLDivElement;
         private mark!: HTMLSpanElement;
 
-        private _value: number;
-        private minimum: number;
-        private maximum: number;
-        private step: number;
-
-        constructor() {
-                super();
-
-                this._value = 0;
-                this.minimum = 0;
-                this.maximum = 1;
-                this.step = 1;
-        }
+        private _value: number = 0;
+        private minimum: number = 0;
+        private maximum: number = 1;
+        private step: number = 1;
 
         connectedCallback() {
                 const template = document.querySelector<HTMLTemplateElement>("#slider-template")!;

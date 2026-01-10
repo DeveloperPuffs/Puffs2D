@@ -20,13 +20,13 @@ export class Character extends Entity2D {
         private static HEIGHT = 50;
         private static LOOK_FACTOR = 2;
 
-        private state: State;
-        private direction: Direction;
-        private speed: number;
+        private state: State = State.IDLE;
+        private direction: Direction = Direction.LEFT;
+        private speed: number = 3600;
 
-        private eyesScale: number;
-        private scale: Vector2D;
-        private wobble: Vector2D;
+        private eyesScale: number = 1;
+        private scale: Vector2D = new Vector2D(1, 1);
+        private wobble: Vector2D = new Vector2D(1, 1);
 
         private outlineColor: string;
         private outlineThickness: number;
@@ -38,27 +38,24 @@ export class Character extends Entity2D {
         private mouth: Texture;
         private hand: Texture;
 
-        private weapon!: Texture;
+        private weapon: Texture;
         private weaponScale: Vector2D = new Vector2D(1, 1);
         private currentSwingAngle: number = 0;
         private targetSwingAngle: number = 0;
         private swingVelocity: number = 0;
 
-        private hat!: Texture;
+        private hat: Texture;
         private hatScale: Vector2D = new Vector2D(1, 1);
 
         constructor(private canvas: Canvas2D) {
                 super(0, 0, Character.WIDTH, Character.HEIGHT);
-                this.speed = 3600;
 
-                this.state = State.IDLE;
-                this.direction = Direction.LEFT;
-
-                this.name = "";
                 const nameInput = document.querySelector<HTMLInputElement>("#name-input")!;
                 nameInput.addEventListener("input", () => {
                         this.name = nameInput.value;
                 });
+
+                this.name = nameInput.value;
 
                 this.body = getTexture("body.svg");
                 this.eyes = getTexture("eyes.svg");
@@ -81,18 +78,17 @@ export class Character extends Entity2D {
                         this.outlineColor = outlineColorPicker.color;
                 });
 
-                this.outlineColor = "#FFFFFF";
-
                 const outlineThicknessSlider = document.querySelector<SliderElement>("#outline-thickness")!;
-                this.outlineThickness = outlineThicknessSlider.value;
                 outlineThicknessSlider.addEventListener("input", () => {
                         this.outlineThickness = outlineThicknessSlider.value;
                 });
 
-                this.eyesScale = 1;
+                this.outlineColor = outlineColorPicker.color;
+                this.outlineThickness = outlineThicknessSlider.value;
+
                 this.scheduleBlink();
 
-                this.canvas.mouse.onClick(() => {
+                this.canvas.onClick(() => {
                         if (this.targetSwingAngle === 120) {
                                 this.targetSwingAngle = 0;
                         } else {
@@ -102,14 +98,6 @@ export class Character extends Entity2D {
                         this.canvas.camera.shake(10);
                 });
 
-                this.scale = new Vector2D(1, 1);
-                this.wobble = new Vector2D(1, 1);
-
-                this.initializeHatSwitching();
-                this.initializeWeaponSwitching();
-        }
-
-        initializeHatSwitching() {
                 const hatSelector = document.querySelector<SpriteSelectorElement>("#hat-selector")!;
                 hatSelector.addEventListener("change", () => {
                         this.hat = hatSelector.sprite;
@@ -118,9 +106,7 @@ export class Character extends Entity2D {
                 });
 
                 this.hat = hatSelector.sprite;
-        }
 
-        initializeWeaponSwitching() {
                 const weaponSelector = document.querySelector<SpriteSelectorElement>("#weapon-selector")!;
                 weaponSelector.addEventListener("change", () => {
                         this.weapon = weaponSelector.sprite;
@@ -131,14 +117,14 @@ export class Character extends Entity2D {
                 this.weapon = weaponSelector.sprite;
         }
 
-        scheduleBlink() {
+        private scheduleBlink() {
                 const delay = 2000 + Math.random() * 3000; 
                 setTimeout(() => {
                         this.animateBlink();
                 }, delay);
         }
 
-        animateBlink() {
+        private animateBlink() {
                 const duration = 100 + Math.random() * 200;
                 const startTime = performance.now();
 
@@ -161,10 +147,10 @@ export class Character extends Entity2D {
         }
 
         update(deltaTime: number) {
-                const w = this.canvas.keyboard.checkKey("KeyW, ArrowUp");
-                const a = this.canvas.keyboard.checkKey("KeyA, ArrowLeft");
-                const s = this.canvas.keyboard.checkKey("KeyS, ArrowDown");
-                const d = this.canvas.keyboard.checkKey("KeyD, ArrowRight");
+                const w = this.canvas.checkKey("KeyW, ArrowUp");
+                const a = this.canvas.checkKey("KeyA, ArrowLeft");
+                const s = this.canvas.checkKey("KeyS, ArrowDown");
+                const d = this.canvas.checkKey("KeyD, ArrowRight");
 
                 const h = Number(d) - Number(a);
                 const v = Number(s) - Number(w);
@@ -199,7 +185,7 @@ export class Character extends Entity2D {
                 }
 
                 const deadzone = this.body.width / 8;
-                const distance = this.canvas.mouse.x - this.x;
+                const distance = this.canvas.cursor.x - this.x;
                 if (Math.abs(distance) > deadzone) {
                         const direction = distance < 0 ? Direction.LEFT : Direction.RIGHT;
                         if (direction != this.direction) {
@@ -211,7 +197,7 @@ export class Character extends Entity2D {
                 }
         }
 
-        renderSword(context: CanvasRenderingContext2D, direction: Direction) {
+        private renderSword(context: CanvasRenderingContext2D, direction: Direction) {
                 const shoulderOffsetX = this.body.height / 2.5 * (direction === Direction.LEFT ? 1 : -1);
                 const shoulderOffsetY = -this.body.height / 5;
                 const handShoulderDistance = this.body.height / 2;
@@ -226,8 +212,8 @@ export class Character extends Entity2D {
                 const swordOffsetY = -this.weapon.height / 4;
 
                 const cursorAngle = Math.atan2(
-                        this.canvas.mouse.y - this.y,
-                        this.canvas.mouse.x - this.x
+                        this.canvas.cursor.y - this.y,
+                        this.canvas.cursor.x - this.x
                 );
 
                 const leftArmAdvanceAngle = cursorAngle - Math.PI / 2;
@@ -269,7 +255,7 @@ export class Character extends Entity2D {
                 context.restore();
         }
 
-        renderSpear(context: CanvasRenderingContext2D, direction: Direction) {
+        private renderSpear(context: CanvasRenderingContext2D, direction: Direction) {
                 const shoulderOffsetX = this.body.height / 2.5 * (direction === Direction.LEFT ? 1 : -1);
                 const shoulderOffsetY = -this.body.height / 5;
                 const handShoulderDistance = this.body.height / 2;
@@ -280,8 +266,8 @@ export class Character extends Entity2D {
                 const swordOffsetY = -this.weapon.height / 4;
 
                 const cursorAngle = Math.atan2(
-                        this.canvas.mouse.y - this.y,
-                        this.canvas.mouse.x - this.x
+                        this.canvas.cursor.y - this.y,
+                        this.canvas.cursor.x - this.x
                 );
 
                 const leftArmAdvanceAngle = cursorAngle - Math.PI / 2;
@@ -321,12 +307,12 @@ export class Character extends Entity2D {
                 context.restore();
         }
 
-        renderHand(context: CanvasRenderingContext2D, direction: Direction) {
+        private renderHand(context: CanvasRenderingContext2D, direction: Direction) {
                 const shoulderOffsetX = this.body.height / 2.5 * (direction === Direction.LEFT ? 1 : -1);
                 const shoulderOffsetY = -this.body.height / 5;
                 const handShoulderDistance = this.body.height / 2;
 
-                if (this.direction !== direction && this.weapon !== undefined) {
+                if (this.direction !== direction) {
                         const metadata = this.weapon.getMetadata();
                         switch (metadata.behavior) {
                                 case "sword":
@@ -363,7 +349,7 @@ export class Character extends Entity2D {
                 context.restore();
         }
 
-        renderShape(context: CanvasRenderingContext2D) {
+        private renderShape(context: CanvasRenderingContext2D) {
                 if (this.direction === Direction.RIGHT) {
                         this.renderHand(context, Direction.LEFT);
                 } else {
@@ -381,8 +367,8 @@ export class Character extends Entity2D {
                         this.body.height
                 );
 
-                const lookX = (this.canvas.mouse.x - this.x) / this.w * Character.LOOK_FACTOR;
-                const lookY = (this.canvas.mouse.y - this.y) / this.h * Character.LOOK_FACTOR;
+                const lookX = (this.canvas.cursor.x - this.x) / this.w * Character.LOOK_FACTOR;
+                const lookY = (this.canvas.cursor.y - this.y) / this.h * Character.LOOK_FACTOR;
 
                 context.drawImage(
                         this.eyes.getImage(false),
@@ -427,7 +413,7 @@ export class Character extends Entity2D {
                 }
         };
 
-        renderCharacter(context: CanvasRenderingContext2D) {
+        private renderCharacter(context: CanvasRenderingContext2D) {
                 context.save();
                 context.scale(this.scale.x, this.scale.y);
 

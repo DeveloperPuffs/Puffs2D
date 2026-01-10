@@ -97,16 +97,9 @@ export class ColorPickerElement extends HTMLElement {
         private presets!: HTMLDivElement;
         private sliders!: HTMLDivElement;
 
-        private _color: Hex;
+        private _color: Hex = "#000000FF";
         private model?: ColorModel<any>;
-        private controls: Map<keyof any, SliderElement>;
-
-        constructor() {
-                super();
-
-                this._color = "#000000FF";
-                this.controls = new Map();
-        }
+        private controls: Map<keyof any, SliderElement> = new Map();
 
         get color() {
                 return this._color;

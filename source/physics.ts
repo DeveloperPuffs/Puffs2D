@@ -3,11 +3,10 @@ import { Vector2D, Rectangle2D } from "./math";
 export class Entity2D extends Rectangle2D {
         public velocity: Vector2D = Vector2D.zero();
         public acceleration: Vector2D = Vector2D.zero();
-        public friction: number;
+        public friction: number = 10;
 
         constructor(public x: number, public y: number, public w: number, public h: number) {
                 super(x, y, w, h);
-                this.friction = 10;
         }
 
         update(deltaTime: number) {
