@@ -20,6 +20,9 @@ export class Character extends Entity2D {
         private static HEIGHT = 50;
         private static LOOK_FACTOR = 2;
 
+        private static IDLE_ARM_ANGLE_RANGE = Math.PI / 20;
+        private static RUNNING_ARM_ANGLE_RANGE = Math.PI / 4;
+
         private state: State = State.IDLE;
         private direction: Direction = Direction.LEFT;
         private speed: number = 3600;
@@ -37,6 +40,9 @@ export class Character extends Entity2D {
         private eyes: Texture;
         private mouth: Texture;
         private hand: Texture;
+
+        private currentArmAngleRange: number = Character.IDLE_ARM_ANGLE_RANGE;
+        private targetArmAngleRange: number = Character.IDLE_ARM_ANGLE_RANGE;
 
         private weapon: Texture;
         private weaponScale: Vector2D = new Vector2D(1, 1);
@@ -171,8 +177,12 @@ export class Character extends Entity2D {
 
                 const currentTime = Date.now();
 
-                this.state = Math.abs(this.velocity.x) + Math.abs(this.velocity.y) > 2 ?
-                        State.RUNNING : State.IDLE;
+                this.state = h || v ? State.RUNNING : State.IDLE;
+
+                this.targetArmAngleRange = this.state === State.RUNNING
+                        ? Character.RUNNING_ARM_ANGLE_RANGE
+                        : Character.IDLE_ARM_ANGLE_RANGE;
+                this.currentArmAngleRange += 4 * (this.targetArmAngleRange - this.currentArmAngleRange) * deltaTime;
 
                 this.wobble.x = 1 + Math.cos(currentTime / 200) / 40;
                 this.wobble.y = 1 + Math.sin(currentTime / 200) / 40;
@@ -321,10 +331,9 @@ export class Character extends Entity2D {
                 }
 
                 const currentTime = Date.now();
-                const armAngleRange = this.state === State.RUNNING ? Math.PI / 3 : Math.PI / 30;
                 const armAngle = direction === Direction.LEFT
-                                ? Math.sin((currentTime / 200) + Math.PI) * armAngleRange
-                                : Math.sin((currentTime / 200)) * armAngleRange;
+                                ? this.currentArmAngleRange * Math.sin((currentTime / 200) + Math.PI)
+                                : this.currentArmAngleRange * Math.sin((currentTime / 200));
 
                 const freeHandX = handShoulderDistance * Math.cos(armAngle + Math.PI / 2);
                 const freeHandY = handShoulderDistance * Math.sin(armAngle + Math.PI / 2);
