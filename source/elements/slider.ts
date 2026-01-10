@@ -1,6 +1,4 @@
-import { LabeledElement } from "./labeled";
-
-export class SliderElement extends LabeledElement {
+export class SliderElement extends HTMLElement {
         static define() {
                 customElements.define("slider-element", SliderElement);
         }
@@ -24,14 +22,12 @@ export class SliderElement extends LabeledElement {
         }
 
         connectedCallback() {
-                super.connectedCallback();
-
                 const template = document.querySelector<HTMLTemplateElement>("#slider-template")!;
-                this.control.append(template.content.cloneNode(true));
+                this.replaceChildren(template.content.cloneNode(true));
 
-                this.track = this.control.querySelector<HTMLDivElement>(".track")!;
-                this.thumb = this.control.querySelector<HTMLDivElement>(".thumb")!;
-                this.mark = this.control.querySelector<HTMLSpanElement>("span")!;
+                this.track = this.querySelector<HTMLDivElement>(".track")!;
+                this.thumb = this.querySelector<HTMLDivElement>(".thumb")!;
+                this.mark = this.querySelector<HTMLSpanElement>("span")!;
 
                 this.track.addEventListener("pointerdown", event => {
                         this.classList.add("dragging");
@@ -61,16 +57,12 @@ export class SliderElement extends LabeledElement {
                 this.step = Number(this.getAttribute("step") ?? this.step);
 
                 this.refresh();
-
-                return "";
         }
 
         attributeChangedCallback(name: string, oldValue: string, newValue: string) {
                 if (oldValue === newValue) {
                         return;
                 }
-
-                super.attributeChangedCallback(name, oldValue, newValue);
 
                 switch (name) {
                         case "minimum":

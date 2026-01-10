@@ -31,7 +31,6 @@ export class Character extends Entity2D {
         private outlineColor: string;
         private outlineThickness: number;
 
-        private keys: Record<string, boolean>;
         private name: string;
 
         private body: Texture;
@@ -39,13 +38,14 @@ export class Character extends Entity2D {
         private mouth: Texture;
         private hand: Texture;
 
-        private sword: Texture | undefined = undefined;
+        private weapon!: Texture;
+        private weaponScale: Vector2D = new Vector2D(1, 1);
         private currentSwingAngle: number = 0;
         private targetSwingAngle: number = 0;
         private swingVelocity: number = 0;
 
-        private hat: Texture;
-        private hatScale: Vector2D;
+        private hat!: Texture;
+        private hatScale: Vector2D = new Vector2D(1, 1);
 
         constructor(private canvas: Canvas2D) {
                 super(0, 0, Character.WIDTH, Character.HEIGHT);
@@ -53,30 +53,6 @@ export class Character extends Entity2D {
 
                 this.state = State.IDLE;
                 this.direction = Direction.LEFT;
-
-                this.keys = {};
-                window.addEventListener("keydown", event => {
-                        const element = document.activeElement;
-                        if (element instanceof HTMLElement) {
-                                if (element.tagName === "INPUT" && (element as HTMLInputElement).type === "text") {
-                                        return;
-                                }
-
-                                if (element.tagName === "TEXTAREA") {
-                                        return;
-                                }
-
-                                if (element.isContentEditable) {
-                                        return;
-                                }
-                        }
-
-                        this.keys[event.code] = true;
-                });
-
-                window.addEventListener("keyup", event => {
-                        this.keys[event.code] = false;
-                });
 
                 this.name = "";
                 const nameInput = document.querySelector<HTMLInputElement>("#name-input")!;
@@ -129,17 +105,30 @@ export class Character extends Entity2D {
                 this.scale = new Vector2D(1, 1);
                 this.wobble = new Vector2D(1, 1);
 
-                this.sword = getTexture("sword.svg");
+                this.initializeHatSwitching();
+                this.initializeWeaponSwitching();
+        }
 
+        initializeHatSwitching() {
                 const hatSelector = document.querySelector<SpriteSelectorElement>("#hat-selector")!;
-                this.hat = hatSelector.sprite;
-
-                this.hatScale = new Vector2D(1, 1);
                 hatSelector.addEventListener("change", () => {
                         this.hat = hatSelector.sprite;
-                        this.hatScale.x += 0.25;
-                        this.hatScale.y += 0.25;
+                        this.hatScale.x += 0.1;
+                        this.hatScale.y += 0.1;
                 });
+
+                this.hat = hatSelector.sprite;
+        }
+
+        initializeWeaponSwitching() {
+                const weaponSelector = document.querySelector<SpriteSelectorElement>("#weapon-selector")!;
+                weaponSelector.addEventListener("change", () => {
+                        this.weapon = weaponSelector.sprite;
+                        this.weaponScale.x += 0.1;
+                        this.weaponScale.y += 0.1;
+                });
+
+                this.weapon = weaponSelector.sprite;
         }
 
         scheduleBlink() {
@@ -172,17 +161,17 @@ export class Character extends Entity2D {
         }
 
         update(deltaTime: number) {
-                const up = this.keys["ArrowUp"] || this.keys["KeyW"];
-                const down = this.keys["ArrowDown"] || this.keys["KeyS"];
-                const left = this.keys["ArrowLeft"] || this.keys["KeyA"];
-                const right = this.keys["ArrowRight"] || this.keys["KeyD"];
+                const w = this.canvas.keyboard.checkKey("KeyW, ArrowUp");
+                const a = this.canvas.keyboard.checkKey("KeyA, ArrowLeft");
+                const s = this.canvas.keyboard.checkKey("KeyS, ArrowDown");
+                const d = this.canvas.keyboard.checkKey("KeyD, ArrowRight");
 
-                const horizontal = Number(!!right) - Number(!!left);
-                const vertical = Number(!!down) - Number(!!up);
-                const diagonal = horizontal && vertical ? 1 / Math.sqrt(2) : 1;
+                const h = Number(d) - Number(a);
+                const v = Number(s) - Number(w);
+                const diagonal = h && v ? 1 / Math.sqrt(2) : 1;
 
-                this.acceleration.x = this.speed * horizontal * diagonal;
-                this.acceleration.y = this.speed * vertical * diagonal;
+                this.acceleration.x = this.speed * h * diagonal;
+                this.acceleration.y = this.speed * v * diagonal;
                 super.update(deltaTime);
 
                 this.scale.x += (1 - this.scale.x) * 0.1;
@@ -190,6 +179,9 @@ export class Character extends Entity2D {
 
                 this.hatScale.x += (1 - this.hatScale.x) * 0.1;
                 this.hatScale.y += (1 - this.hatScale.y) * 0.1;
+
+                this.weaponScale.x += (1 - this.weaponScale.x) * 0.1;
+                this.weaponScale.y += (1 - this.weaponScale.y) * 0.1;
 
                 const currentTime = Date.now();
 
@@ -219,61 +211,131 @@ export class Character extends Entity2D {
                 }
         }
 
+        renderSword(context: CanvasRenderingContext2D, direction: Direction) {
+                const shoulderOffsetX = this.body.height / 2.5 * (direction === Direction.LEFT ? 1 : -1);
+                const shoulderOffsetY = -this.body.height / 5;
+                const handShoulderDistance = this.body.height / 2;
+
+                const swingAngle = direction === Direction.LEFT
+                        ? this.currentSwingAngle * Math.PI / 180
+                        : -this.currentSwingAngle * Math.PI / 180;
+
+                const swordWidth = this.weapon.width;
+                const swordHeight = this.weapon.height;
+                const swordOffsetX = 0;
+                const swordOffsetY = -this.weapon.height / 4;
+
+                const cursorAngle = Math.atan2(
+                        this.canvas.mouse.y - this.y,
+                        this.canvas.mouse.x - this.x
+                );
+
+                const leftArmAdvanceAngle = cursorAngle - Math.PI / 2;
+                const handOffsetX = Math.cos(leftArmAdvanceAngle) * handShoulderDistance;
+                const handOffsetY = Math.sin(leftArmAdvanceAngle) * handShoulderDistance;
+
+                context.save();
+                context.translate(shoulderOffsetX, shoulderOffsetY); // Origin is at shoulder
+
+                context.rotate(cursorAngle + swingAngle); // rotate the arm by the swing angle
+
+                context.translate(handOffsetX, handOffsetY);
+
+                context.rotate(swingAngle - Math.PI / 2); // rotate the wrist by the swing angle
+
+                context.scale(
+                        this.weaponScale.x,
+                        this.weaponScale.y
+                );
+
+                context.drawImage(
+                        this.weapon.getImage(false),
+                        -swordWidth / 2 + swordOffsetX,
+                        -swordHeight / 2 + swordOffsetY,
+                        swordWidth,
+                        swordHeight
+                );
+
+                context.scale(this.wobble.x, this.wobble.y);
+
+                context.drawImage(
+                        this.hand.getImage(false),
+                        -this.hand.width / 2,
+                        -this.hand.height / 2,
+                        this.hand.width,
+                        this.hand.height
+                );
+
+                context.restore();
+        }
+
+        renderSpear(context: CanvasRenderingContext2D, direction: Direction) {
+                const shoulderOffsetX = this.body.height / 2.5 * (direction === Direction.LEFT ? 1 : -1);
+                const shoulderOffsetY = -this.body.height / 5;
+                const handShoulderDistance = this.body.height / 2;
+
+                const swordWidth = this.weapon.width;
+                const swordHeight = this.weapon.height;
+                const swordOffsetX = 0;
+                const swordOffsetY = -this.weapon.height / 4;
+
+                const cursorAngle = Math.atan2(
+                        this.canvas.mouse.y - this.y,
+                        this.canvas.mouse.x - this.x
+                );
+
+                const leftArmAdvanceAngle = cursorAngle - Math.PI / 2;
+                const handOffsetX = Math.cos(leftArmAdvanceAngle) * handShoulderDistance;
+                const handOffsetY = Math.sin(leftArmAdvanceAngle) * handShoulderDistance;
+
+                context.save();
+                context.translate(shoulderOffsetX, shoulderOffsetY); // Origin is at shoulder
+
+                context.rotate(cursorAngle + Math.PI / 2);
+
+                context.translate(handOffsetX, handOffsetY);
+
+                context.scale(
+                        this.weaponScale.x,
+                        this.weaponScale.y
+                );
+
+                context.drawImage(
+                        this.weapon.getImage(false),
+                        -swordWidth / 2 + swordOffsetX,
+                        -swordHeight / 2 + swordOffsetY,
+                        swordWidth,
+                        swordHeight
+                );
+
+                context.scale(this.wobble.x, this.wobble.y);
+
+                context.drawImage(
+                        this.hand.getImage(false),
+                        -this.hand.width / 2,
+                        -this.hand.height / 2,
+                        this.hand.width,
+                        this.hand.height
+                );
+
+                context.restore();
+        }
+
         renderHand(context: CanvasRenderingContext2D, direction: Direction) {
                 const shoulderOffsetX = this.body.height / 2.5 * (direction === Direction.LEFT ? 1 : -1);
                 const shoulderOffsetY = -this.body.height / 5;
                 const handShoulderDistance = this.body.height / 2;
 
-                if (this.direction !== direction) {
-                        const swingAngle = direction === Direction.LEFT
-                                ? this.currentSwingAngle * Math.PI / 180
-                                : -this.currentSwingAngle * Math.PI / 180;
-
-                        const swordWidth = this.sword!.width;
-                        const swordHeight = this.sword!.height;
-                        const swordOffsetX = 0;
-                        const swordOffsetY = -this.sword!.height / 4;
-
-                        const cursorAngle = Math.atan2(
-                                this.canvas.mouse.y - this.y,
-                                this.canvas.mouse.x - this.x
-                        );
-
-                        const leftArmAdvanceAngle = cursorAngle - Math.PI / 2;
-                        const handOffsetX = Math.cos(leftArmAdvanceAngle) * handShoulderDistance;
-                        const handOffsetY = Math.sin(leftArmAdvanceAngle) * handShoulderDistance;
-
-                        context.save();
-                        context.translate(shoulderOffsetX, shoulderOffsetY); // Origin is at shoulder
-
-                        context.rotate(cursorAngle + swingAngle); // rotate the arm by the swing angle
-
-                        context.translate(handOffsetX, handOffsetY);
-
-                        context.rotate(swingAngle - Math.PI / 2); // rotate the wrist by the swing angle
-
-                        context.drawImage(
-                                this.sword!.getImage(false),
-                                -swordWidth / 2 + swordOffsetX,
-                                -swordHeight / 2 + swordOffsetY,
-                                swordWidth,
-                                swordHeight
-                        );
-
-                        context.save();
-                        context.scale(this.wobble.x, this.wobble.y);
-
-                        context.drawImage(
-                                this.hand.getImage(false),
-                                -this.hand.width / 2,
-                                -this.hand.height / 2,
-                                this.hand.width,
-                                this.hand.height
-                        );
-
-                        context.restore();
-                        context.restore();
-                        return;
+                if (this.direction !== direction && this.weapon !== undefined) {
+                        const metadata = this.weapon.getMetadata();
+                        switch (metadata.behavior) {
+                                case "sword":
+                                        this.renderSword(context, direction);
+                                        return;
+                                case "spear":
+                                        this.renderSpear(context, direction);
+                                        return;
+                        }
                 }
 
                 const currentTime = Date.now();

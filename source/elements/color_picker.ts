@@ -89,7 +89,7 @@ const RGBA_MODEL: ColorModel<RGBA> = {
         }
 };
 
-export class ColorPickerElement extends LabeledElement {
+export class ColorPickerElement extends HTMLElement {
         static define() {
                 customElements.define("color-picker-element", ColorPickerElement);
         }
@@ -139,21 +139,20 @@ export class ColorPickerElement extends LabeledElement {
         }
 
         connectedCallback() {
-                const content = super.connectedCallback();
-
-                const template = document.querySelector<HTMLTemplateElement>("#color-picker-template")!;
-                this.control.append(template.content.cloneNode(true));
-
-                this.presets = this.control.querySelector<HTMLDivElement>(".presets")!;
-                this.sliders = this.control.querySelector<HTMLDivElement>(".sliders")!;
-
-                this.color = this.getAttribute("color") ?? this.color;
-
-                const presets = content
+                const presets = this.textContent
                         .trim()
                         .split(",")
                         .map(preset => preset.trim())
                         .filter(preset => preset.length > 0);
+
+
+                const template = document.querySelector<HTMLTemplateElement>("#color-picker-template")!;
+                this.replaceChildren(template.content.cloneNode(true));
+
+                this.presets = this.querySelector<HTMLDivElement>(".presets")!;
+                this.sliders = this.querySelector<HTMLDivElement>(".sliders")!;
+
+                this.color = this.getAttribute("color") ?? this.color;
 
                 for (const preset of presets) {
                         const button = document.createElement("button");
@@ -181,12 +180,18 @@ export class ColorPickerElement extends LabeledElement {
                         this.controls.clear();
 
                         for (const component of this.model.components) {
+                                const labeled = document.createElement("labeled-element") as LabeledElement;
+                                labeled.setAttribute("label", component.label);
+                                labeled.toggleAttribute("inline-label", true);
+                                labeled.setAttribute("margin", "least");
+
                                 const slider = document.createElement("slider-element") as SliderElement;
-                                slider.setAttribute("label", component.label);
-                                slider.toggleAttribute("inline-label", true);
                                 slider.setAttribute("minimum", component.minimum.toString()); 
                                 slider.setAttribute("maximum", component.maximum.toString()); 
                                 slider.setAttribute("step", component.step.toString()); 
+                                labeled.appendChild(slider);
+
+                                this.sliders.appendChild(labeled);
 
                                 slider.addEventListener("input", () => {
                                         state[component.key] = slider.value;
@@ -194,12 +199,8 @@ export class ColorPickerElement extends LabeledElement {
                                 });
 
                                 this.controls.set(component.key, slider); 
-                                this.sliders.appendChild(slider);
-
                                 slider.value = state[component.key];
                         }
                 }
-
-                return "";
         }
 }

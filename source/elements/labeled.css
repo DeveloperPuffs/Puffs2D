@@ -1,21 +1,38 @@
 @import "./../variables.css";
 
-.labeled {
+labeled-element {
         display: flex;
         flex-direction: column;
         margin-bottom: var(--medium-spacing);
 }
 
-.labeled > label {
+labeled-element > label {
         white-space: pre;
+        margin-bottom: var(--tiny-spacing);
 }
 
-.labeled[inline-label] {
+labeled-element[inline-label] {
         flex-direction: row;
         align-items: center;
-        gap: var(--small-spacing)
+        gap: var(--small-spacing);
 }
 
-.labeled[inline-label] > label {
+labeled-element[inline-label] > label {
+        margin-bottom: 0;
+}
+
+labeled-element > .labeled {
+        flex: 1;
+}
+
+labeled-element[margin="less"] {
+        margin-bottom: var(--small-spacing);
+}
+
+labeled-element[margin="lesser"] {
+        margin-bottom: var(--tiny-spacing);
+}
+
+labeled-element[margin="least"] {
         margin-bottom: 0;
 }

@@ -3,13 +3,15 @@ import { Character } from "./character";
 import { Background } from "./background";
 import { Outliner } from "./outliner";
 import { Vector2D } from "./math";
-import { Mouse } from "./mouse";
+import { Mouse } from "./system/mouse";
+import { Keyboard } from "./system/keyboard";
 
 export class Canvas2D {
         private element: HTMLCanvasElement;
         private context: CanvasRenderingContext2D;
 
         public mouse: Mouse;
+        public keyboard: Keyboard;
         public camera: Camera2D;
         public background: Background;
         public outliner: Outliner;
@@ -21,7 +23,9 @@ export class Canvas2D {
                 this.element = document.querySelector<HTMLCanvasElement>("#canvas")!;
                 this.context = this.element.getContext("2d")!;
 
-                this.mouse = new Mouse(this.element);
+                this.mouse = new Mouse(this.validateClick);
+                this.keyboard = new Keyboard(this.validateKeyPress);
+
                 this.camera = new Camera2D(this);
                 this.background = new Background(this);
                 this.outliner = new Outliner();
@@ -41,6 +45,37 @@ export class Canvas2D {
                 });
 
                 resizeObserver.observe(this.element);
+        }
+
+        private validateClick = (event: MouseEvent) => {
+                if (!(event.target instanceof Node)) {
+                        return false;
+                }
+
+                if (!this.element.contains(event.target)) {
+                        return false;
+                }
+
+                return true;
+        }
+
+        private validateKeyPress = (_: KeyboardEvent) => {
+                const element = document.activeElement;
+                if (element instanceof HTMLElement) {
+                        if (element.tagName === "INPUT" && (element as HTMLInputElement).type === "text") {
+                                return false;
+                        }
+
+                        if (element.tagName === "TEXTAREA") {
+                                return false;
+                        }
+
+                        if (element.isContentEditable) {
+                                return false;
+                        }
+                }
+
+                return true;
         }
 
         startRunning() {

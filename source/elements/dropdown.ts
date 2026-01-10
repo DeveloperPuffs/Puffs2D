@@ -1,6 +1,4 @@
-import { LabeledElement } from "./labeled";
-
-export class DropdownElement extends LabeledElement {
+export class DropdownElement extends HTMLElement {
         static define() {
                 customElements.define("dropdown-element", DropdownElement);
         }
@@ -8,15 +6,8 @@ export class DropdownElement extends LabeledElement {
         private button!: HTMLButtonElement;
         private list!: HTMLUListElement;
 
-        private options: string[];
-        private _value: string;
-
-        constructor() {
-                super();
-
-                this._value = "";
-                this.options = [];
-        }
+        private options: string[] = [];
+        private _value: string = "";
 
         get value() {
                 return this._value;
@@ -37,19 +28,17 @@ export class DropdownElement extends LabeledElement {
         }
 
         connectedCallback() {
-                const content = super.connectedCallback();
-
-                const template = document.querySelector<HTMLTemplateElement>("#dropdown-template")!;
-                this.control.append(template.content.cloneNode(true));
-
-                this.button = this.control.querySelector<HTMLButtonElement>("button")!;
-                this.list = this.control.querySelector<HTMLUListElement>("ul")!;
-
-                this.options = content
+                this.options = this.textContent
                         .trim()
                         .split(",")
                         .map(option => option.trim())
                         .filter(option => option.length > 0);
+
+                const template = document.querySelector<HTMLTemplateElement>("#dropdown-template")!;
+                this.replaceChildren(template.content.cloneNode(true));
+
+                this.button = this.querySelector<HTMLButtonElement>("button")!;
+                this.list = this.querySelector<HTMLUListElement>("ul")!;
 
                 for (const option of this.options) {
                         const item = document.createElement("li");
@@ -73,13 +62,6 @@ export class DropdownElement extends LabeledElement {
                 });
 
                 this.value = this.getAttribute("value")!;
-
-                const identifier = this.id || crypto.randomUUID();
-                this.id = "";
-
-                this.button.id = `${identifier}-button`;
-                this.label.htmlFor = this.button.id;
-
-                return "";
+                this.button.id = this.getAttribute("input-id") ?? "";
         }
 }

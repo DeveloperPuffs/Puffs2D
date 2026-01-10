@@ -1,6 +1,4 @@
-import { LabeledElement } from "./labeled";
-
-export class ToggleElement extends LabeledElement {
+export class ToggleElement extends HTMLElement {
         static define() {
                 customElements.define("toggle-element", ToggleElement);
         }
@@ -24,12 +22,10 @@ export class ToggleElement extends LabeledElement {
         }
 
         connectedCallback() {
-                super.connectedCallback();
-
                 const template = document.querySelector<HTMLTemplateElement>("#toggle-template")!;
-                this.control.append(template.content.cloneNode(true));
+                this.replaceChildren(template.content.cloneNode(true));
 
-                this.button = this.control.querySelector<HTMLButtonElement>("button")!;
+                this.button = this.querySelector<HTMLButtonElement>("button")!;
 
                 this.button.addEventListener("click", () => {
                         const checked = this.button.getAttribute("aria-checked");
@@ -40,6 +36,6 @@ export class ToggleElement extends LabeledElement {
                 this._state = typeof state === "string" && state === "true";
                 this.button.setAttribute("aria-checked", String(this._state));
 
-                return "";
+                this.button.id = this.getAttribute("input-id") ?? "";
         }
 }

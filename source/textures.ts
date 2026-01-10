@@ -6,6 +6,7 @@ import spritesData from "./sprites.json";
 
 export type Metadata = {
         type: "none" | "hat" | "weapon";
+        behavior?: string;
         offset?: {
                 x: number;
                 y: number
@@ -187,10 +188,10 @@ export async function loadTextures() {
                 textures.set(spriteData.path, texture);
 
                 if (spriteData.metadata !== undefined) {
-                        metadata.set(spriteData.path, {
-                                type: spriteData.metadata.type as Metadata["type"],
-                                offset: spriteData.metadata.offset
-                        });
+                        const type = spriteData.metadata.type as Metadata["type"];
+                        const behavior = spriteData.metadata.behavior;
+                        const offset = spriteData.metadata.offset;
+                        metadata.set(spriteData.path, { type, behavior, offset });
                 }
         }
 }

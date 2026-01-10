@@ -1,15 +1,14 @@
 @import "./../variables.css";
 
-slider-element > .control {
+slider-element {
         margin-left: var(--small-spacing);
         gap: var(--medium-spacing);
         align-items: center;
         user-select: none;
         display: flex;
-        width: 100%;
 }
 
-slider-element > .control > .track {
+slider-element > .track {
         flex: 1;
         position: relative;
         height: var(--small-spacing);
@@ -18,7 +17,7 @@ slider-element > .control > .track {
         cursor: pointer;
 }
 
-slider-element > .control > .track > .thumb {
+slider-element > .track > .thumb {
         position: absolute;
         top: 50%;
         border-radius: 50%;
@@ -29,15 +28,15 @@ slider-element > .control > .track > .thumb {
         transition: left 100ms ease-out;
 }
 
-slider-element.dragging > .control > .track > .thumb {
+slider-element.dragging > .track > .thumb {
         transition: none;
 }
 
-slider-element:not(.connected) > .control > .track .thumb {
+slider-element:not(.connected) > .track .thumb {
         transition: none;
 }
 
-slider-element > .control > span {
+slider-element > span {
         white-space: pre;
         text-align: right;
 }

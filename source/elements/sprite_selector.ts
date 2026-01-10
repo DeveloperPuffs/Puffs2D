@@ -1,8 +1,7 @@
-import { LabeledElement } from "./labeled";
 import { getTexture, Texture } from "../textures";
 import tippy from "tippy.js";
 
-export class SpriteSelectorElement extends LabeledElement {
+export class SpriteSelectorElement extends HTMLElement {
         static define() {
                 customElements.define("sprite-selector-element", SpriteSelectorElement);
         }
@@ -29,18 +28,19 @@ export class SpriteSelectorElement extends LabeledElement {
         }
 
         connectedCallback() {
-                const content = super.connectedCallback();
-
-                const paths = content
+                const paths = this.textContent
                         .trim()
                         .split(",")
                         .map(path => path.trim())
                         .filter(path => path.length > 0);
 
+                this.replaceChildren();
+
                 for (const path of paths) {
                         const texture = getTexture(path);
                         const image = texture.getImage(true);
-                        this.control.appendChild(image);
+                        this.appendChild(image);
+
                         this.sprites.set(path, texture);
 
                         image.addEventListener("click", () => {
@@ -62,7 +62,5 @@ export class SpriteSelectorElement extends LabeledElement {
                 this.sprite = getTexture(this.getAttribute("value")!);
                 const image = this.sprite.getImage(true);
                 image.classList.add("selected");
-
-                return "";
         }
 }

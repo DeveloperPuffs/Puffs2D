@@ -1,24 +1,24 @@
 @import "./../variables.css";
 
-color-picker-element > .control {
+color-picker-element {
         background-color: var(--light-background-color);
         padding: var(--small-spacing);
         display: flex;
         flex-direction: column;
 }
 
-color-picker-element > .control > .presets {
+color-picker-element > .presets {
         display: grid;
         gap: var(--small-spacing);
         grid-template-columns: repeat(auto-fill, var(--medium-spacing));
         justify-content: space-between;
 }
 
-color-picker-element > .control > .presets:has(*) {
+color-picker-element > .presets:has(*) {
         padding: var(--small-spacing);
 }
 
-color-picker-element > .control > .presets > button {
+color-picker-element > .presets > button {
         border-radius: var(--large-radius);
         width: var(--medium-spacing);
         height: var(--medium-spacing);
@@ -26,16 +26,16 @@ color-picker-element > .control > .presets > button {
         margin: 0;
 }
 
-color-picker-element > .control > .sliders {
+color-picker-element > .sliders {
         display: flex;
         flex-direction: column;
         gap: var(--tiny-spacing);
 }
 
-color-picker-element > .control > .sliders:has(*) {
+color-picker-element > .sliders:has(*) {
         padding: var(--small-spacing);
 }
 
-color-picker-element > .control > .sliders > slider-element {
+color-picker-element > .sliders > slider-element {
         margin-bottom: 0;
 }

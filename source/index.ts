@@ -36,6 +36,7 @@ import { loadTextures } from "./textures";
 
 await loadTextures();
 
+import { LabeledElement } from "./elements/labeled.js";
 import { ToggleElement } from "./elements/toggle";
 import { SliderElement } from "./elements/slider";
 import { DropdownElement } from "./elements/dropdown";
@@ -43,6 +44,7 @@ import { ColorPickerElement } from "./elements/color_picker";
 import { SpriteSelectorElement } from "./elements/sprite_selector";
 import { Canvas2D } from "./canvas";
 
+LabeledElement.define();
 ToggleElement.define();
 SliderElement.define();
 DropdownElement.define();

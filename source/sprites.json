@@ -23,10 +23,11 @@
 
         {
                 "name": "Sword",
-                "path": "sword.svg",
+                "path": "weapons/sword.svg",
                 "outline": true,
                 "metadata": {
                         "type": "weapon",
+                        "behavior": "sword",
                         "offset": {
                                 "x": 0,
                                 "y": 0
@@ -35,10 +36,11 @@
         },
         {
                 "name": "Spear",
-                "path": "spear.svg",
+                "path": "weapons/spear.svg",
                 "outline": true,
                 "metadata": {
                         "type": "weapon",
+                        "behavior": "spear",
                         "offset": {
                                 "x": 0,
                                 "y": 0

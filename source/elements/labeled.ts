@@ -1,26 +1,26 @@
-export abstract class LabeledElement extends HTMLElement {
-        protected label!: HTMLLabelElement;
-        protected control!: HTMLDivElement;
+export class LabeledElement extends HTMLElement {
+        static define() {
+                customElements.define("labeled-element", LabeledElement);
+        }
+
+        private label!: HTMLLabelElement;
 
         connectedCallback() {
-                const content = this.innerHTML;
-
-                this.classList.add("labeled");
-                this.replaceChildren();
+                const children = Array.from(this.childNodes);
 
                 const template = document.querySelector<HTMLTemplateElement>("#labeled-template")!;
-                this.append(template.content.cloneNode(true));
+                this.replaceChildren(template.content.cloneNode(true));
 
                 this.label = this.querySelector<HTMLLabelElement>("label")!;
-                this.control = this.querySelector<HTMLDivElement>(".control")!;
-
                 this.label.textContent = this.getAttribute("label") ?? "";
 
-                requestAnimationFrame(() => {
-                        this.classList.add("connected");
-                });
+                const forValue = this.getAttribute("for");
+                if (forValue !== null) {
+                        this.label.setAttribute("for", forValue);
+                }
 
-                return content;
+                const labeled = this.querySelector<HTMLDivElement>(".labeled")!;
+                labeled.append(...children);
         }
 
         attributeChangedCallback(name: string, oldValue: string, newValue: string) {
@@ -31,6 +31,9 @@ export abstract class LabeledElement extends HTMLElement {
                 switch (name) {
                         case "label":
                                 this.label.textContent = newValue;
+                                break;
+                        case "for":
+                                this.label.setAttribute("for", newValue);
                                 break;
                         default:
                                 return;

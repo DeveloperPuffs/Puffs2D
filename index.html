@@ -37,110 +37,128 @@
                                                 <div id="general-content" class="step">
                                                         <div class="title">General Information</div>
                                                         <div class="scroller">
-                                                                <label for="name-input">Name</label>
-                                                                <input
-                                                                        id="name-input"
-                                                                        type="text"
-                                                                        name="username"
-                                                                        placeholder="PlasmaPuffs"
-                                                                        spellcheck="false"
-                                                                >
-                                                                <dropdown-element label="Pronouns" value="Unspecified" inline-label>
-                                                                        He / Him,
-                                                                        She / Her,
-                                                                        They / Them,
-                                                                        It / Its,
-                                                                        Unspecified
-                                                                </dropdown-element>
-                                                                <label for="notes-input">Additional Notes</label>
-                                                                <textarea
-                                                                        id="notes-input"
-                                                                        name="notes-input"
-                                                                        placeholder="Cool."
-                                                                        rows="3"
-                                                                ></textarea>
+                                                                <labeled-element for="name-input" label="Name" inline-label margin="less">
+                                                                        <input
+                                                                                id="name-input"
+                                                                                type="text"
+                                                                                name="username"
+                                                                                autocomplete="username"
+                                                                                placeholder="PlasmaPuffs"
+                                                                                spellcheck="false"
+                                                                        >
+                                                                </labeled-element>
+                                                                <labeled-element for="pronouns-input" label="Pronouns" inline-label>
+                                                                        <dropdown-element input-id="pronouns-input" value="Unspecified">
+                                                                                He / Him,
+                                                                                She / Her,
+                                                                                They / Them,
+                                                                                It / Its,
+                                                                                Unspecified
+                                                                        </dropdown-element>
+                                                                </labeled-element>
+                                                                <labeled-element for="notes-input" label="Additonal Notes">
+                                                                        <textarea
+                                                                                id="notes-input"
+                                                                                name="notes-input"
+                                                                                placeholder="Cool."
+                                                                                rows="3"
+                                                                        ></textarea>
+                                                                </labeled-element>
                                                                 <button class="proceed">Proceed</button>
                                                         </div>
                                                 </div>
                                                 <div id="appearance-content" class="step">
                                                         <div class="title">Appearance</div>
                                                         <div class="scroller">
-                                                                <color-picker-element
-                                                                        label="Body Color"
-                                                                        color="#fae196"
-                                                                        format="rgb"
-                                                                        id="body-color-picker"
-                                                                >
-                                                                        #fae196,
-                                                                        #F7D7B4,
-                                                                        #F0C8A0,
-                                                                        #E8B98C,
-                                                                        #E0AD82,
-                                                                        #D9A06F,
-                                                                        #CF8F5F,
-                                                                        #C78455,
-                                                                        #B8734A,
-                                                                        #A9653F,
-                                                                        #945736,
-                                                                        #7F472C,
-                                                                        #E4E4E4,
-                                                                        #D8A5A5,
-                                                                        #C6B7E2,
-                                                                        #6FB7B1
-                                                                </color-picker-element>
+                                                                <labeled-element label="Body Color">
+                                                                        <color-picker-element
+                                                                                color="#fae196"
+                                                                                format="rgb"
+                                                                                id="body-color-picker"
+                                                                        >
+                                                                                #fae196,
+                                                                                #F7D7B4,
+                                                                                #F0C8A0,
+                                                                                #E8B98C,
+                                                                                #E0AD82,
+                                                                                #D9A06F,
+                                                                                #CF8F5F,
+                                                                                #C78455,
+                                                                                #B8734A,
+                                                                                #A9653F,
+                                                                                #945736,
+                                                                                #7F472C,
+                                                                                #E4E4E4,
+                                                                                #D8A5A5,
+                                                                                #C6B7E2,
+                                                                                #6FB7B1
+                                                                        </color-picker-element>
+                                                                </labeled-element>
                                                                 <button class="proceed">Proceed</button>
                                                         </div>
                                                 </div>
                                                 <div id="accessories-content" class="step">
                                                         <div class="title">Accessories</div>
                                                         <div class="scroller">
-                                                                <sprite-selector-element
-                                                                        id="hat-selector"
-                                                                        value="hats/no_hat.svg"
-                                                                        label="Headwear"
-                                                                >
-                                                                        hats/no_hat.svg,
-                                                                        hats/top_hat.svg,
-                                                                        hats/baseball_cap.svg,
-                                                                        hats/propeller_hat.svg,
-                                                                        hats/christmas_hat.svg,
-                                                                        hats/wizard_hat.svg
-                                                                </sprite-selector-element>
+                                                                <labeled-element label="Headwear">
+                                                                        <sprite-selector-element
+                                                                                id="hat-selector"
+                                                                                value="hats/no_hat.svg"
+                                                                        >
+                                                                                hats/no_hat.svg,
+                                                                                hats/top_hat.svg,
+                                                                                hats/baseball_cap.svg,
+                                                                                hats/propeller_hat.svg,
+                                                                                hats/christmas_hat.svg,
+                                                                                hats/wizard_hat.svg
+                                                                        </sprite-selector-element>
+                                                                </labeled-element>
                                                                 <button class="proceed">Proceed</button>
                                                         </div>
                                                 </div>
                                                 <div id="weapons-content" class="step">
                                                         <div class="title">Weapons</div>
                                                         <div class="scroller">
-                                                                <span>Coming Soon</span><br>
+                                                                <labeled-element value="Weapon">
+                                                                        <sprite-selector-element
+                                                                                id="weapon-selector"
+                                                                                value="weapons/sword.svg"
+                                                                        >
+                                                                                weapons/sword.svg,
+                                                                                weapons/spear.svg
+                                                                        </sprite-selector-element>
+                                                                </labeled-element>
                                                                 <button class="proceed">Proceed</button>
                                                         </div>
                                                 </div>
                                                 <div id="options-content" class="step">
                                                         <div class="title">Options</div>
                                                         <div class="scroller">
-                                                                <toggle-element state="true" label="Enable Blinking" inline-label>
-                                                                </toggle-element>
-                                                                <toggle-element state="true" label="Eyes Follow Cursor" inline-label>
-                                                                </toggle-element>
-                                                                <toggle-element state="true" label="Show Name" inline-label>
-                                                                </toggle-element>
-                                                                <toggle-element state="true" label="Enable Outline" inline-label>
-                                                                </toggle-element>
-                                                                <color-picker-element
-                                                                        label="Outline Color"
-                                                                        color="#FFFFFF"
-                                                                        format="rgba"
-                                                                        id="outline-color-picker"
-                                                                ></color-picker-element>
-                                                                <slider-element inline-label
-                                                                        id="outline-thickness"
-                                                                        label="Outline Thickness"
-                                                                        minimum="2"
-                                                                        maximum="6"
-                                                                        value="3"
-                                                                        step="0.5"
-                                                                ></slider-element>
+                                                                <labeled-element for="enable-blinking-toggle" label="Enable Blinking" inline-label margin="less">
+                                                                        <toggle-element input-id="enable-blinking-toggle" state="true"></toggle-element>
+                                                                </labeled-element>
+                                                                <labeled-element for="eyes-follow-cursor-toggle" label="Eyes Follow Cursor" inline-label margin="less">
+                                                                        <toggle-element input-id="eyes-follow-cursor-toggle" state="true"></toggle-element>
+                                                                </labeled-element>
+                                                                <labeled-element for="enable-outline-toggle" label="Enable Outline" inline-label margin="less">
+                                                                        <toggle-element input-id="enable-outline-toggle" state="true"></toggle-element>
+                                                                </labeled-element>
+                                                                <labeled-element label="Outline Thickness" inline-label>
+                                                                        <slider-element
+                                                                                id="outline-thickness"
+                                                                                minimum="2"
+                                                                                maximum="6"
+                                                                                value="3"
+                                                                                step="0.5"
+                                                                        ></slider-element>
+                                                                </labeled-element>
+                                                                <labeled-element label="Outline Color">
+                                                                        <color-picker-element
+                                                                                color="#FFFFFF"
+                                                                                format="rgba"
+                                                                                id="outline-color-picker"
+                                                                        ></color-picker-element>
+                                                                </labeled-element>
                                                                 <button class="proceed">Proceed</button>
                                                         </div>
                                                 </div>
@@ -158,10 +176,11 @@
                 </main>
                 <template id="labeled-template">
                         <label></label>
-                        <div class="control"></div>
+                        <div class="labeled">
+                        </div>
                 </template>
                 <template id="toggle-template">
-                        <button type="button" role="switch" aria-checked="false">
+                        <button type="button" role="switch">
                                 <div class="handle"></div>
                         </button>
                 </template>

@@ -1,17 +1,17 @@
 @import "./../variables.css";
 
-dropdown-element > .control {
+dropdown-element {
         position: relative;
         width: 100%;
 }
 
-dropdown-element > .control > button {
+dropdown-element > button {
         width: 100%;
         text-align: left;
         margin-bottom: 0 !important;
 }
 
-dropdown-element > .control > ul {
+dropdown-element > ul {
         display: none;
         list-style: none;
         position: absolute;
@@ -31,13 +31,13 @@ dropdown-element > .control > ul {
         z-index: 999;
 }
 
-dropdown-element > .control > ul > li {
+dropdown-element > ul > li {
         padding: var(--tiny-spacing) var(--small-spacing);
         transition: background-color 100ms ease-out;
         background-color: transparent;
         cursor: pointer;
 }
 
-dropdown-element > .control > ul > li:hover {
+dropdown-element > ul > li:hover {
         background-color: var(--lighter-background-color);
 }

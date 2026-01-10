@@ -7,18 +7,18 @@
 @import "./elements/sprite_selector.css";
 
 ::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
+        width: var(--small-spacing);
+        height: var(--small-spacing);
 }
 
 ::-webkit-scrollbar-track {
         background: var(--light-background-color); 
-        border-radius: var(--medium-radius);
+        border-radius: calc(var(--small-spacing) / 2);
 }
 
 ::-webkit-scrollbar-thumb {
         background: var(--lighter-background-color); 
-        border-radius: var(--medium-radius);
+        border-radius: calc(var(--small-spacing) / 2);
 }
 
 ::placeholder {
@@ -170,43 +170,14 @@ main.editing > #editor {
         padding-right: var(--medium-spacing);
 }
 
-label {
-        margin-bottom: var(--tiny-spacing);
-}
-
 input[type="text"], textarea {
+        width: 100%;
         border: none;
         outline: none;
         border-radius: var(--medium-radius);
         background-color: var(--light-background-color);
         padding: var(--tiny-spacing) var(--small-spacing);
         font-family: "Monaspace Radon", monospace;
-        margin-bottom: var(--medium-spacing);
-}
-
-input[type="range"] {
-        background-color: transparent;
-        margin-bottom: var(--medium-spacing);
-        width: 100%;
-}
-
-input[type="range"]::-webkit-slider-runnable-track {
-        -webkit-appearance: none;
-        border-radius: 999px;
-        background-color: var(--light-background-color);
-}
-
-input[type="range"]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background-color: var(--lighter-background-color);
-        cursor: pointer;
-}
-
-input[type="range"]::-webkit-slider-thumb:hover {
-        background-color: var(--lightest-background-color);
 }
 
 textarea {
@@ -225,10 +196,6 @@ button {
 
 button:hover {
         background-color: var(--lighter-background-color);
-}
-
-:not(.dropdown) > button {
-        margin-bottom: var(--medium-spacing);
 }
 
 main > #canvas {
