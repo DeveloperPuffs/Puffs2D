@@ -4,17 +4,26 @@ import { ColorPickerElement } from "./elements/color_picker";
 
 import spritesData from "./sprites.json";
 
-export type Metadata = {
-        type: "none" | "headwear" | "weapon";
-        behavior?: string;
-        offset?: {
-                x: number;
-                y: number
-        };
+export type Transform = {
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+        r: number;
 };
 
-const textures: Map<string, Texture> = new Map();
-const metadata: Map<string, Metadata> = new Map();
+export const DEFAULT_TRANSFORM: Transform = {
+        x: 0, y: 0, w: 1, h: 1, r: 0
+};
+
+export type Metadata = {
+        type: "none" | "upload" | "headwear" | "weapon";
+        name: string;
+        outline: boolean;
+        transform: Transform;
+        behavior?: string;
+};
+
 export class Texture {
         private static RESOLUTION = 4;
         private static parser = new DOMParser();
@@ -22,6 +31,9 @@ export class Texture {
 
         public width!: number;
         public height!: number;
+
+        private loaded: boolean = false;
+        private source!: "svg" | "bitmap";
 
         private svgElement!: SVGSVGElement;
         private rasterizedImage!: HTMLImageElement;
@@ -34,27 +46,37 @@ export class Texture {
         private outlineQueued: boolean = false;
         private outlining: boolean = false;
 
-        constructor(public name: string, private path: string, private hasOutline: boolean) {
-                if (this.hasOutline) {
+        constructor(public metadata: Metadata) {
+                if (this.metadata.outline) {
                         this.outliner = new Outliner();
+
+                        const outlineColorPicker = document.querySelector<ColorPickerElement>("#outline-color-picker")!;
+                        outlineColorPicker.addEventListener("input", () => {
+                                this.outline();
+                        });
+
+                        const outlineThicknessSlider = document.querySelector<SliderElement>("#outline-thickness")!;
+                        outlineThicknessSlider.addEventListener("input", () => {
+                                this.outline();
+                        });
                 }
         }
 
         getSVG() {
+                if (!this.loaded || this.source === "bitmap") {
+                        return undefined;
+                }
+
                 return this.svgElement;
         }
 
         getImage(outlined: boolean) {
-                return outlined && this.hasOutline ? this.outlinedImage! : this.rasterizedImage;
+                return outlined && this.metadata.outline ? this.outlinedImage! : this.rasterizedImage;
         }
 
-        getMetadata() {
-                return metadata.get(this.path)!;
-        }
+        loadSVG(text: string) {
+                this.source = "svg";
 
-        async load() {
-                const response = await fetch(this.path);
-                const text = await response.text();
                 const parsed = Texture.parser.parseFromString(text, "image/svg+xml");
                 if (!(parsed.documentElement instanceof SVGSVGElement)) {
                         throw new Error("Parsed texture is not an SVG");
@@ -68,26 +90,48 @@ export class Texture {
                 this.rasterizedImage.width = this.width * Texture.RESOLUTION;
                 this.rasterizedImage.height = this.height * Texture.RESOLUTION;
 
-                if (this.hasOutline) {
+                if (this.metadata.outline) {
                         this.outlinedImage = new Image();
                         this.outlinedImage.width = this.width * Texture.RESOLUTION;
                         this.outlinedImage.height = this.height * Texture.RESOLUTION;
-
-                        const outlineColorPicker = document.querySelector<ColorPickerElement>("#outline-color-picker")!;
-                        outlineColorPicker.addEventListener("input", () => {
-                                this.outline();
-                        });
-
-                        const outlineThicknessSlider = document.querySelector<SliderElement>("#outline-thickness")!;
-                        outlineThicknessSlider.addEventListener("input", () => {
-                                this.outline();
-                        });
                 }
 
+                this.loaded = true;
                 this.rasterize();
         }
 
+        async loadBitmap(blob: Blob) {
+                this.source = "bitmap";
+
+                const url = URL.createObjectURL(blob);
+                const image = new Image();
+
+                await new Promise((resolve, reject) => {
+                        image.onload = resolve;
+                        image.onerror = reject;
+                        image.src = url;
+                });
+
+                this.width = image.naturalWidth;
+                this.height = image.naturalHeight;
+                this.rasterizedImage = image;
+                URL.revokeObjectURL(url);
+
+                if (this.metadata.outline) {
+                        this.outlinedImage = new Image();
+                        this.outlinedImage.width = this.width;
+                        this.outlinedImage.height = this.height;
+                }
+
+                this.loaded = true;
+                this.outline();
+        }
+
         async rasterize() {
+                if (!this.loaded || this.source === "bitmap") {
+                        return;
+                }
+
                 this.rasterQueued = true;
                 if (this.rasterizing) {
                         return;
@@ -115,7 +159,7 @@ export class Texture {
                         this.rasterizedImage.src = image.src;
                         URL.revokeObjectURL(url);
 
-                        if (this.hasOutline) {
+                        if (this.outline) {
                                 this.outline();
                         }
                 }
@@ -124,7 +168,11 @@ export class Texture {
         }
 
         private async outline() {
-                if (!this.hasOutline) {
+                if (!this.loaded) {
+                        return;
+                }
+
+                if (!this.metadata.outline) {
                         return;
                 }
 
@@ -173,26 +221,29 @@ export class Texture {
         }
 }
 
+const textures: Map<string, Texture> = new Map();
+
 export async function loadTextures() {
         textures.clear();
 
         for (const spriteData of spritesData) {
-                const texture = new Texture(
-                        spriteData.name,
-                        spriteData.path,
-                        spriteData.outline
-                );
+                const metadata: Metadata = {
+                        name: spriteData.name,
+                        type: spriteData.type as Metadata["type"],
+                        behavior: spriteData.behavior,
+                        outline: spriteData.outline,
+                        transform: {
+                                ...DEFAULT_TRANSFORM,
+                                ...spriteData.transform
+                        }
+                };
 
-                await texture.load();
-
+                const texture = new Texture(metadata);
                 textures.set(spriteData.path, texture);
 
-                if (spriteData.metadata !== undefined) {
-                        const type = spriteData.metadata.type as Metadata["type"];
-                        const behavior = spriteData.metadata.behavior;
-                        const offset = spriteData.metadata.offset;
-                        metadata.set(spriteData.path, { type, behavior, offset });
-                }
+                const response = await fetch(spriteData.path);
+                const text = await response.text();
+                texture.loadSVG(text);
         }
 }
 

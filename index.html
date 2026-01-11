@@ -102,6 +102,7 @@
                                                         <div class="scroller">
                                                                 <labeled-element label="Headwear">
                                                                         <sprite-selector-element
+                                                                                type="headwear"
                                                                                 id="headwear-selector"
                                                                                 value="headwear/no_headwear.svg"
                                                                         >
@@ -110,7 +111,8 @@
                                                                                 headwear/baseball_cap.svg,
                                                                                 headwear/propeller_hat.svg,
                                                                                 headwear/christmas_hat.svg,
-                                                                                headwear/wizard_hat.svg
+                                                                                headwear/wizard_hat.svg,
+                                                                                headwear/upload_headwear.svg
                                                                         </sprite-selector-element>
                                                                 </labeled-element>
                                                                 <button class="proceed">Proceed</button>
@@ -199,6 +201,10 @@
                 <template id="color-picker-template">
                         <div class="presets"></div>
                         <div class="sliders"></div>
+                </template>
+                <template id="sprite-selector-template">
+                        <div class="sprite-grid"></div>
+                        <div class="sprite-editor"></div>
                 </template>
                 <script src="source/index.js" type="module" defer></script>
         </body>

@@ -2,139 +2,113 @@
         {
                 "name": "Body",
                 "path": "body.svg",
-                "outline": false
+                "outline": false,
+                "type": "body"
         },
         {
                 "name": "Mouth",
                 "path": "mouth.svg",
-                "outline": false
+                "outline": false,
+                "type": "body"
         },
         {
                 "name": "Hand",
                 "path": "hand.svg",
-                "outline": false
+                "outline": false,
+                "type": "body"
         },
 
         {
                 "name": "Eyes",
                 "path": "eyes.svg",
-                "outline": false
+                "outline": false,
+                "type": "body"
         },
 
         {
                 "name": "No Weapon",
                 "path": "weapons/no_weapon.svg",
                 "outline": false,
-                "metadata": {
-                        "type": "none"
-                }
+                "type": "none"
         },
         {
                 "name": "Sword",
                 "path": "weapons/sword.svg",
                 "outline": true,
-                "metadata": {
-                        "type": "weapon",
-                        "behavior": "sword",
-                        "offset": {
-                                "x": 0,
-                                "y": 0
-                        }
-                }
+                "type": "weapon",
+                "behavior": "sword"
         },
         {
                 "name": "Spear",
                 "path": "weapons/spear.svg",
                 "outline": true,
-                "metadata": {
-                        "type": "weapon",
-                        "behavior": "spear",
-                        "offset": {
-                                "x": 0,
-                                "y": 0
-                        }
-                }
+                "type": "weapon",
+                "behavior": "spear"
         },
         {
                 "name": "Staff",
                 "path": "weapons/staff.svg",
                 "outline": true,
-                "metadata": {
-                        "type": "weapon",
-                        "behavior": "sword",
-                        "offset": {
-                                "x": 0,
-                                "y": 0
-                        }
-                }
+                "type": "weapon",
+                "behavior": "sword"
         },
 
         {
                 "name": "No Headwear",
                 "path": "headwear/no_headwear.svg",
                 "outline": false,
-                "metadata": {
-                        "type": "none"
-                }
+                "type": "none"
         },
         {
                 "name": "Top Hat",
                 "path": "headwear/top_hat.svg",
                 "outline": true,
-                "metadata": {
-                        "type": "headwear",
-                        "offset": {
-                                "x": 0,
-                                "y": -20
-                        }
+                "type": "headwear",
+                "transform": {
+                        "y": -20
                 }
         },
         {
                 "name": "Baseball Cap",
                 "path": "headwear/baseball_cap.svg",
                 "outline": true,
-                "metadata": {
-                        "type": "headwear",
-                        "offset": {
-                                "x": -24,
-                                "y": 0
-                        }
+                "type": "headwear",
+                "transform": {
+                        "x": -24
                 }
         },
         {
                 "name": "Propeller Hat",
                 "path": "headwear/propeller_hat.svg",
                 "outline": true,
-                "metadata": {
-                        "type": "headwear",
-                        "offset": {
-                                "x": -24,
-                                "y": -24
-                        }
+                "type": "headwear",
+                "transform": {
+                        "x": -24,
+                        "y": -24
                 }
         },
         {
                 "name": "Christmas Hat",
                 "path": "headwear/christmas_hat.svg",
                 "outline": true,
-                "metadata": {
-                        "type": "headwear",
-                        "offset": {
-                                "x": 16,
-                                "y": 0
-                        }
+                "type": "headwear",
+                "transform": {
+                        "x": 16
                 }
         },
         {
                 "name": "Wizard Hat",
                 "path": "headwear/wizard_hat.svg",
                 "outline": true,
-                "metadata": {
-                        "type": "headwear",
-                        "offset": {
-                                "x": 0,
-                                "y": -20
-                        }
+                "type": "headwear",
+                "transform": {
+                        "y": -20
                 }
+        },
+        {
+                "name": "Upload your Own Image!",
+                "path": "headwear/upload_headwear.svg",
+                "outline": false,
+                "type": "upload"
         }
 ]

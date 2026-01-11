@@ -1,13 +1,20 @@
 @import "./../variables.css";
 
 sprite-selector-element {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+}
+
+sprite-selector-element > .sprite-grid {
         display: grid;
+        width: 100%;
         grid-template-columns: repeat(auto-fit, minmax(var(--image-size), auto));
         justify-content: start;
         gap: var(--small-spacing);
 }
 
-sprite-selector-element > img {
+sprite-selector-element > .sprite-grid > img {
         object-fit: contain;
         background-color: var(--light-background-color);
         border-radius: var(--medium-radius);
@@ -17,10 +24,15 @@ sprite-selector-element > img {
         cursor: pointer;
 }
 
-sprite-selector-element > img:hover {
+sprite-selector-element > .sprite-grid > img:hover {
         background-color: var(--lighter-background-color);
 }
 
-sprite-selector-element > img.selected {
-        border: 2px solid var(--lightest-background-color);
+sprite-selector-element > .sprite-grid > img.selected {
+        outline: 2px solid var(--lightest-background-color);
+}
+
+sprite-selector-element > .sprite-editor {
+        width: 200px;
+        height: 200px;
 }

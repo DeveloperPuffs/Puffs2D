@@ -114,11 +114,11 @@ export class Character extends Entity2D {
 
                 const bodyColorPicker = document.querySelector<ColorPickerElement>("#body-color-picker")!;
                 bodyColorPicker.addEventListener("input", () => {
-                        const bodyPath = this.body.getSVG().querySelector<SVGClipPathElement>("#colorable")!;
+                        const bodyPath = this.body.getSVG()!.querySelector<SVGClipPathElement>("#colorable")!;
                         bodyPath.style.fill = bodyColorPicker.color;
                         this.body.rasterize();
 
-                        const handPath = this.hand.getSVG().querySelector<SVGClipPathElement>("#colorable")!;
+                        const handPath = this.hand.getSVG()!.querySelector<SVGClipPathElement>("#colorable")!;
                         handPath.style.fill = bodyColorPicker.color;
                         this.hand.rasterize();
                 });
@@ -185,8 +185,7 @@ export class Character extends Entity2D {
                         this.weaponScale.x += 0.1;
                         this.weaponScale.y += 0.1;
 
-                        const metadata = this.weapon.getMetadata();
-                        switch (metadata.behavior) {
+                        switch (this.weapon.metadata.behavior) {
                                 case "sword":
                                         this.weaponBehavior = createSwing();
                                         break;
@@ -426,16 +425,13 @@ export class Character extends Entity2D {
 
         private renderHand(context: CanvasRenderingContext2D, direction: Direction) {
                 if (this.direction !== direction) {
-                        const metadata = this.weapon.getMetadata();
-                        if (metadata.type === "weapon") {
-                                switch (metadata.behavior!) {
-                                        case "sword":
-                                                this.renderSword(context, direction);
-                                                return;
-                                        case "spear":
-                                                this.renderSpear(context, direction);
-                                                return;
-                                }
+                        switch (this.weapon.metadata.behavior) {
+                                case "sword":
+                                        this.renderSword(context, direction);
+                                        return;
+                                case "spear":
+                                        this.renderSpear(context, direction);
+                                        return;
                         }
                 }
 
@@ -506,22 +502,27 @@ export class Character extends Entity2D {
 
                 context.restore();
 
-                const headwearMetadata = this.headwear.getMetadata();
-                if (headwearMetadata.type === "headwear") {
+                if (this.headwear.metadata.type === "headwear") {
+                        const transform = this.headwear.metadata.transform;
+
                         context.save();
-                        context.scale(
-                                this.headwearScale.x * (this.direction === Direction.RIGHT ? -1 : 1),
-                                this.headwearScale.y
-                        );
+
+                        context.scale(this.direction === Direction.RIGHT ? -1 : 1, 1);
+                        context.translate(transform.x, -this.body.height / 2 + transform.y);
+
+                        context.rotate(transform.r);
+                        context.scale(transform.w * this.headwearScale.x, transform.h * this.headwearScale.y);
 
                         context.drawImage(
                                 this.headwear.getImage(false),
-                                -this.headwear.width / 2 + headwearMetadata.offset!.x,
-                                -this.headwear.height / 2 - this.body.height / 2 + headwearMetadata.offset!.y,
+                                -this.headwear.width / 2,
+                                -this.headwear.height / 2,
                                 this.headwear.width,
                                 this.headwear.height
                         );
+
                         context.restore();
+
                 }
 
                 if (this.direction === Direction.RIGHT) {
