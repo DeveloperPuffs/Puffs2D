@@ -596,8 +596,8 @@ export class Character extends Entity2D {
                 context.restore();
 
                 // I need to make the image big enough to contain the whole character sprite
-                const BUFFER_WIDTH = this.body.width * 5;
-                const BUFFER_HEIGHT = this.body.height * 5;
+                const BUFFER_WIDTH = this.body.width * 10;
+                const BUFFER_HEIGHT = this.body.height * 10;
 
                 const thickness = this.enableOutline ? this.outlineThickness : 0;
                 const outlined = this.context.outliner.process(

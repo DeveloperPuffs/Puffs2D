@@ -48,6 +48,23 @@ export class SpriteSelectorElement extends HTMLElement {
                         return;
                 }
 
+                if (sprite.metadata.type === "upload") {
+                        this.uploader.click();
+                        return;
+                }
+
+                if (this.sprite === sprite) {
+                        return;
+                }
+
+                const oldImage = this.sprite.getImage(true);
+                oldImage.classList.remove("selected");
+
+                const newImage = sprite.getImage(true);
+                newImage.classList.add("selected");
+
+                this.placeTexture();
+
                 this._sprite = sprite;
                 this.dispatchEvent(new Event("change"));
         }
@@ -70,7 +87,7 @@ export class SpriteSelectorElement extends HTMLElement {
                         this.grid.appendChild(image);
 
                         image.addEventListener("click", () => {
-                                this.selectTexture(texture);
+                                this.sprite = texture;
                         });
 
                         if (texture.metadata.type === "upload") {
@@ -84,8 +101,8 @@ export class SpriteSelectorElement extends HTMLElement {
                         animation: "scale"
                 });
 
-                this.sprite = getTexture(this.getAttribute("value")!);
-                const image = this.sprite.getImage(true);
+                this._sprite = getTexture(this.getAttribute("value")!);
+                const image = this._sprite.getImage(true);
                 image.classList.add("selected");
 
                 this.uploader.addEventListener("change", async () => {
@@ -109,7 +126,7 @@ export class SpriteSelectorElement extends HTMLElement {
 
                         const image = texture.getImage(true);
                         image.addEventListener("click", () => {
-                                this.selectTexture(texture);
+                                this.sprite = texture;
                         });
 
                         this.upload.parentNode!.insertBefore(image, this.upload);
@@ -127,7 +144,7 @@ export class SpriteSelectorElement extends HTMLElement {
                         texture.metadata.transform.w = scale;
                         texture.metadata.transform.h = scale;
 
-                        this.selectTexture(texture);
+                        this.sprite = texture;
                 });
 
                 this.initializeEditor();
@@ -297,26 +314,6 @@ export class SpriteSelectorElement extends HTMLElement {
                 this.sprite.metadata.transform.h = this.spriteImage.scaleY();
                 this.sprite.metadata.transform.r = this.spriteImage.rotation() * Math.PI / 180;
         };
-
-        private selectTexture(texture: Texture) {
-                if (texture.metadata.type === "upload") {
-                        this.uploader.click();
-                        return;
-                }
-
-                if (this.sprite === texture) {
-                        return;
-                }
-
-                const oldImage = this.sprite.getImage(true);
-                oldImage.classList.remove("selected");
-
-                this.sprite = texture;
-                const newImage = this.sprite.getImage(true);
-                newImage.classList.add("selected");
-
-                this.placeTexture();
-        }
 
         private placeTexture() {
                 const metadata = this.sprite.metadata;

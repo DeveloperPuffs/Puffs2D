@@ -60,6 +60,9 @@ if (import.meta.env.DEV) {
         });
 }
 
+import { setupRandomizer } from "./randomizer.js";
+setupRandomizer();
+
 const canvas = new Canvas2D();
 canvas.startRunning();
 

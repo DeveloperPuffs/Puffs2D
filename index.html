@@ -40,10 +40,25 @@
                                 <div id="scroller">
                                         <div id="track">
                                                 <div id="welcome-content" class="step">
-                                                        <div class="title">Puff Stuff</div>
-                                                        <div class="scroller">
+                                                        <div class="title">Welcome to Puff Stuff!</div>
+                                                        <div style="display: block; height: 100%;">
+                                                                The preview on the right shows your <span
+                                                                        style="font-family: 'Monaspace Radon', consolas, monospace; font-style: italic;"
+                                                                        >Puff</span> character. Changes apply and update immediately as you adjust settings.
+                                                                <br>
+                                                                <br>
+                                                                - Use WASD or arrow keys to move
+                                                                <br>
+                                                                - Your character automatically faces your cursor, try moving it around
+                                                                <br>
+                                                                <br>
+                                                                <button class="proceed">Start Customizing</button>
+                                                                <br>
+                                                                <br>
+                                                                <br>
+                                                                <span class="secondary">Or generate a random Puff:</span>
+                                                                <button class="secondary" id="randomize">Randomize</button>
                                                         </div>
-                                                        <button class="footer proceed">Start Customizing</button>
                                                 </div>
                                                 <div id="general-content" class="step">
                                                         <div class="title">General</div>
@@ -87,18 +102,6 @@
                                                                                 format="rgb"
                                                                                 id="body-color-picker"
                                                                         >
-                                                                                #fae196,
-                                                                                #F7D7B4,
-                                                                                #F0C8A0,
-                                                                                #E8B98C,
-                                                                                #E0AD82,
-                                                                                #D9A06F,
-                                                                                #CF8F5F,
-                                                                                #C78455,
-                                                                                #B8734A,
-                                                                                #A9653F,
-                                                                                #945736,
-                                                                                #7F472C,
                                                                                 #E4E4E4,
                                                                                 #D8A5A5,
                                                                                 #C6B7E2,
@@ -165,7 +168,7 @@
                                                         <div class="title">Miscellaneous</div>
                                                         <div class="scroller">
                                                                 <labeled-element for="enable-outline-toggle" label="Enable Outline" inline-label margin="less">
-                                                                        <toggle-element id="enable-outline" input-id="enable-outline-toggle" state="true"></toggle-element>
+                                                                        <toggle-element id="enable-outline" input-id="enable-outline-toggle" state="false"></toggle-element>
                                                                 </labeled-element>
                                                                 <labeled-element label="Outline Thickness" inline-label>
                                                                         <slider-element

@@ -259,3 +259,16 @@ main.editing > #canvas {
         padding-left: var(--small-spacing);
         padding-right: var(--medium-spacing);
 }
+
+.secondary {
+        color: var(--foreground-color-2);
+}
+
+#randomize {
+        background-color: transparent;
+        outline: 1px solid var(--lighter-background-color);
+}
+
+#randomize:hover {
+        background-color: var(--light-background-color);
+}
