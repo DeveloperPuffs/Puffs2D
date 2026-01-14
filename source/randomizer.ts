@@ -16,12 +16,6 @@ function parseList(list: string) {
                 .filter(skinColor => skinColor.length !== 0);
 }
 
-const skinColors = parseList(`
-        #fae196, #F7D7B4, #F0C8A0, #E8B98C,
-        #E0AD82, #D9A06F, #CF8F5F, #C78455,
-        #B8734A, #A9653F, #945736, #7F472C
-`);
-
 const headwears = parseList(`
         headwear/no_headwear.svg,
         headwear/top_hat.svg,
@@ -47,14 +41,10 @@ function randomArrayItem<Type>(array: Type[]): Type {
 
 }
 
-function randomColor(skin: boolean) {
-        if (skin && Math.random() <= 0.5) {
-                return randomArrayItem(skinColors);
-        }
-
+function randomColor() {
         const h = Math.random() * 360;
-        const s = (35 + Math.random() * 20) / 100;
-        const l = (70 + Math.random() * 15) / 100;
+        const s = (40 + Math.random() * 60) / 100;
+        const l = (60 + Math.random() * 40) / 100;
 
         const c = (1 - Math.abs(2 * l - 1)) * s;
         const x = c * (1 - Math.abs((h / 60) % 2 - 1));
@@ -78,7 +68,7 @@ function randomColor(skin: boolean) {
 
 function randomize() {
         const bodyColorPicker = document.querySelector<ColorPickerElement>("#body-color-picker")!;
-        bodyColorPicker.color = randomColor(true);
+        bodyColorPicker.color = randomColor();
 
         const handsSizeSlider = document.querySelector<SliderElement>("#hands-size")!;
         handsSizeSlider.value = 40 + Math.random() * 40;
@@ -96,5 +86,5 @@ function randomize() {
         outlineThicknessSlider.value = 2 + Math.round(Math.random() * 8) * 0.5; // 2 to 6, step 0.5
 
         const outlineColorPicker = document.querySelector<ColorPickerElement>("#outline-color-picker")!;
-        outlineColorPicker.color = randomColor(false);
+        outlineColorPicker.color = randomColor();
 }

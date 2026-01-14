@@ -423,6 +423,7 @@ export class Character extends Entity2D {
 
                 context.rotate(swingAngle - Math.PI / 2); // rotate the wrist by the swing angle
 
+                context.scale(this.direction === Direction.LEFT ? 1 : -1, 1);
                 this.renderTexture(context, this.weapon, this.weaponScale);
 
                 context.scale(this.wobble.x, this.wobble.y);
@@ -461,6 +462,7 @@ export class Character extends Entity2D {
 
                 context.rotate(cursorAngle + Math.PI / 2);
 
+                context.scale(this.direction === Direction.LEFT ? -1 : 1, 1);
                 this.renderTexture(context, this.weapon, this.weaponScale);
 
                 context.scale(this.wobble.x, this.wobble.y);
