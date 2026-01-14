@@ -36,6 +36,7 @@ export class SpriteSelectorElement extends HTMLElement {
 
                 this.uploader = document.createElement("input");
                 this.uploader.type = "file";
+                this.uploader.accept = "image/*";
         }
 
         get sprite() {
@@ -162,7 +163,7 @@ export class SpriteSelectorElement extends HTMLElement {
                         this.placeTexture();
                 });
 
-                const canvasWrapper = this.querySelector<HTMLDivElement>(".sprite-editor > .canvas-wrapper")!;
+                const canvasWrapper = this.querySelector<HTMLDivElement>(".canvas-wrapper")!;
 
                 const type = this.getAttribute("type");
                 switch (type) {

@@ -358,12 +358,10 @@ export class Character extends Entity2D {
                         }
                 }
 
-                if (this.flipDeadzone) {
-                        const deadzone = this.body.width / 20;
-                        const distance = this.context.cursorPosition.x - this.x;
-                        if (Math.abs(distance) > deadzone) {
-                                this.direction = distance < 0 ? Direction.LEFT : Direction.RIGHT;
-                        }
+                const deadzone = this.flipDeadzone ? this.body.width / 20 : 0;
+                const distance = this.context.cursorPosition.x - this.x;
+                if (Math.abs(distance) > deadzone) {
+                        this.direction = distance < 0 ? Direction.LEFT : Direction.RIGHT;
                 }
         }
 

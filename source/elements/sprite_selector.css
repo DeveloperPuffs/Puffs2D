@@ -2,18 +2,16 @@
 
 sprite-selector-element {
         display: flex;
-        flex-direction: column;
-        align-items: center;
         gap: var(--medium-spacing);
         background-color: var(--light-background-color);
         padding: var(--medium-spacing);
 }
 
 sprite-selector-element > .sprite-grid {
+        flex: 1;
         display: grid;
-        width: 100%;
-        grid-template-columns: repeat(auto-fit, minmax(var(--image-size), auto));
-        justify-content: start;
+        grid-template-columns: repeat(auto-fit, minmax(var(--image-size), 1fr));
+        grid-auto-rows: var(--image-size);
         gap: var(--small-spacing);
 }
 
@@ -36,33 +34,31 @@ sprite-selector-element > .sprite-grid > img.selected {
 }
 
 sprite-selector-element > .sprite-editor {
+        align-self: flex-end;
         display: flex;
-        width: 100%;
-        gap: var(--medium-spacing);
+        flex-direction: column;
+        width: 200px;
 }
 
-sprite-selector-element > .sprite-editor > .canvas-wrapper {
+sprite-selector-element .canvas-wrapper {
         width: 200px;
         height: 200px;
         border-radius: var(--large-radius);
         background-color: var(--darker-background-color);
+        margin-bottom: var(--small-spacing);
 }
 
-sprite-selector-element > .sprite-editor > .options {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-}
-
-sprite-selector-element > .sprite-editor > .options > ol.controls {
+sprite-selector-element ol.controls {
         display: flex;
         list-style: none;
+        justify-content: space-evenly;
+        width: 200px;
         gap: var(--small-spacing);
         margin: 0;
         padding: 0;
 }
 
-sprite-selector-element > .sprite-editor > .options > ol.controls > li {
+sprite-selector-element ol.controls > li {
         width: 36px;
         height: 36px;
         display: flex;
@@ -74,6 +70,6 @@ sprite-selector-element > .sprite-editor > .options > ol.controls > li {
         border-radius: var(--medium-radius);
 }
 
-sprite-selector-element > .sprite-editor > .options > ol.controls > li:hover {
+sprite-selector-element ol.controls > li:hover {
         background-color: var(--lighter-background-color);
 }

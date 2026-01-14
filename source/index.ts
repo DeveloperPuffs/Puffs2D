@@ -66,22 +66,37 @@ canvas.startRunning();
 const exporter = new Exporter2D();
 
 enum Step {
+        WELCOME = "welcome",
         GENERAL = "general",
         APPEARANCE = "appearance",
         ACCESSORIES = "accessories",
         WEAPONS = "weapons",
         MISCELLANEOUS = "miscellaneous",
-        EXPORT = "export"
+        EXPORT = "export",
+        GALLERY = "gallery"
 }
 
 const stepOrder = Object.freeze([
+        Step.WELCOME,
         Step.GENERAL,
         Step.APPEARANCE,
         Step.ACCESSORIES,
         Step.WEAPONS,
         Step.MISCELLANEOUS,
-        Step.EXPORT
+        Step.EXPORT,
+        Step.GALLERY
 ] as const);
+
+const nextSteps = Object.freeze({
+        [Step.WELCOME]: Step.GENERAL,
+        [Step.GENERAL]: Step.APPEARANCE,
+        [Step.APPEARANCE]: Step.ACCESSORIES,
+        [Step.ACCESSORIES]: Step.WEAPONS,
+        [Step.WEAPONS]: Step.MISCELLANEOUS,
+        [Step.MISCELLANEOUS]: Step.EXPORT,
+        [Step.EXPORT]: Step.GALLERY,
+        [Step.GALLERY]: undefined
+} as const);
 
 let currentStep: Step | undefined = undefined;
 
@@ -133,28 +148,9 @@ window.addEventListener("resize", () => {
 
 document.querySelectorAll<HTMLButtonElement>("button.proceed").forEach(proceedButton => {
         const content = proceedButton.closest<HTMLDivElement>(".step")!;
-        const step = content.id.split("-")[0];
-
-        let nextStep: Step;
-        switch (step) {
-                case Step.GENERAL:
-                        nextStep = Step.APPEARANCE;
-                        break;
-                case Step.APPEARANCE:
-                        nextStep = Step.ACCESSORIES;
-                        break;
-                case Step.ACCESSORIES:
-                        nextStep = Step.WEAPONS;
-                        break;
-                case Step.WEAPONS:
-                        nextStep = Step.MISCELLANEOUS;
-                        break;
-                case Step.MISCELLANEOUS:
-                        nextStep = Step.EXPORT;
-                        break;
-                case Step.EXPORT:
-                        // Done
-                        break;
+        const nextStep = nextSteps[content.id.split("-")[0] as Step];
+        if (nextStep === undefined) {
+                return;
         }
 
         proceedButton.addEventListener("click", () => {

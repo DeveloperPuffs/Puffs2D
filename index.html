@@ -12,6 +12,9 @@
                 <main class="editing">
                         <div id="editor">
                                 <ol id="stepper">
+                                        <li id="welcome-icon" class="icon" data-tippy-content="Welcome">
+                                                <i class="fa-solid fa-hand"></i>
+                                        </li>
                                         <li id="general-icon" class="icon" data-tippy-content="General">
                                                 <i class="fa-solid fa-info"></i>
                                         </li>
@@ -30,11 +33,20 @@
                                         <li id="export-icon" class="icon" data-tippy-content="Export">
                                                 <i class="fa-solid fa-file-export"></i>
                                         </li>
+                                        <li id="gallery-icon" class="icon" data-tippy-content="Gallery">
+                                                <i class="fa-solid fa-photo-film"></i>
+                                        </li>
                                 </ol>
                                 <div id="scroller">
                                         <div id="track">
+                                                <div id="welcome-content" class="step">
+                                                        <div class="title">[Title]</div>
+                                                        <div class="scroller">
+                                                        </div>
+                                                        <button class="footer proceed">Proceed</button>
+                                                </div>
                                                 <div id="general-content" class="step">
-                                                        <div class="title">General Information</div>
+                                                        <div class="title">General</div>
                                                         <div class="scroller">
                                                                 <labeled-element for="name-input" label="Name" inline-label margin="less">
                                                                         <input
@@ -60,7 +72,7 @@
                                                                                 id="notes-input"
                                                                                 name="notes-input"
                                                                                 placeholder="Cool."
-                                                                                rows="3"
+                                                                                rows="5"
                                                                         ></textarea>
                                                                 </labeled-element>
                                                         </div>
@@ -173,7 +185,7 @@
                                                                         <div id="export-preview-wrapper">
                                                                                 <img id="export-preview">
                                                                         </div>
-                                                                        <labeled-element for="file-name-input" label="File Name">
+                                                                        <labeled-element for="file-name-input" label="File Name" margin="less">
                                                                                 <input
                                                                                         id="file-name-input"
                                                                                         type="text"
@@ -239,6 +251,13 @@
                                                                         </labeled-element>
                                                                 </div>
                                                         </div>
+                                                        <button class="footer proceed">Proceed</button>
+                                                </div>
+                                                <div id="gallery-content" class="step">
+                                                        <div class="title">Gallery</div>
+                                                        <div class="scroller">
+                                                                ..
+                                                        </div>
                                                 </div>
                                         </div>
                                 </div>
@@ -272,24 +291,22 @@
                 <template id="sprite-selector-template">
                         <div class="sprite-grid"></div>
                         <div class="sprite-editor">
-                                <div class="canvas-wrapper"></div>
-                                <div class="options">
-                                        <div>Image Options</div><br>
-                                        <ol class="controls">
-                                                <li class="horizontal-flip" data-tippy-content="Flip Horizontally">
-                                                        <i class="fa-solid fa-left-right"></i>
-                                                </li>
-                                                <li class="vertical-flip" data-tippy-content="Flip Vertically">
-                                                        <i class="fa-solid fa-up-down"></i>
-                                                </li>
-                                                <li class="rotate-left" data-tippy-content="Rotate Left">
-                                                        <i class="fa-solid fa-rotate-left"></i>
-                                                </li>
-                                                <li class="rotate-right" data-tippy-content="Rotate Right">
-                                                        <i class="fa-solid fa-rotate-right"></i>
-                                                </li>
-                                        </ol>
+                                <div class="canvas-wrapper">
                                 </div>
+                                <ol class="controls">
+                                        <li class="horizontal-flip" data-tippy-content="Flip Horizontally">
+                                                <i class="fa-solid fa-left-right"></i>
+                                        </li>
+                                        <li class="vertical-flip" data-tippy-content="Flip Vertically">
+                                                <i class="fa-solid fa-up-down"></i>
+                                        </li>
+                                        <li class="rotate-left" data-tippy-content="Rotate Left">
+                                                <i class="fa-solid fa-rotate-left"></i>
+                                        </li>
+                                        <li class="rotate-right" data-tippy-content="Rotate Right">
+                                                <i class="fa-solid fa-rotate-right"></i>
+                                        </li>
+                                </ol>
                         </div>
                 </template>
                 <script src="source/index.js" type="module" defer></script>
