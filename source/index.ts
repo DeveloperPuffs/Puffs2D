@@ -106,7 +106,8 @@ enum Step {
         ACCESSORIES = "accessories",
         WEAPONS = "weapons",
         MISCELLANEOUS = "miscellaneous",
-        EXPORT = "export"
+        EXPORT = "export",
+        CREDITS = "credits"
 }
 
 const stepOrder = Object.freeze([
@@ -116,7 +117,8 @@ const stepOrder = Object.freeze([
         Step.ACCESSORIES,
         Step.WEAPONS,
         Step.MISCELLANEOUS,
-        Step.EXPORT
+        Step.EXPORT,
+        Step.CREDITS
 ] as const);
 
 const nextSteps = Object.freeze({
@@ -126,7 +128,8 @@ const nextSteps = Object.freeze({
         [Step.ACCESSORIES]: Step.WEAPONS,
         [Step.WEAPONS]: Step.MISCELLANEOUS,
         [Step.MISCELLANEOUS]: Step.EXPORT,
-        [Step.EXPORT]: undefined
+        [Step.EXPORT]: Step.CREDITS,
+        [Step.CREDITS]: undefined
 } as const);
 
 let currentStep: Step | undefined = undefined;
