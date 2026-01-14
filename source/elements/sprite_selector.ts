@@ -251,6 +251,9 @@ export class SpriteSelectorElement extends HTMLElement {
                 this.spriteImage = new Konva.Image();
                 this.spriteImage.draggable(true);
 
+                const MAX_WIDTH = 200;
+                const MAX_HEIGHT = 200;
+
                 this.transformer = new Konva.Transformer({
                         rotateAnchorOffset: 25,
                         rotateEnabled: true,
@@ -261,7 +264,18 @@ export class SpriteSelectorElement extends HTMLElement {
                         anchorFill: "rgba(255, 255, 255, 0.5)",
                         anchorStrokeWidth: 0,
                         anchorSize: 10,
-                        anchorCornerRadius: 5
+                        anchorCornerRadius: 5,
+                        boundBoxFunc(_, newBox) {
+                                if (newBox.width > MAX_WIDTH) {
+                                        newBox.width = MAX_WIDTH;
+                                }
+
+                                if (newBox.height > MAX_HEIGHT) {
+                                        newBox.height = MAX_HEIGHT;
+                                }
+
+                                return newBox;
+                        },
                 });
 
                 this.transformer.nodes([this.spriteImage]);
