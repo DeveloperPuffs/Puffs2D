@@ -53,19 +53,15 @@ export class SpriteSelectorElement extends HTMLElement {
                         return;
                 }
 
-                if (this.sprite === sprite) {
-                        return;
-                }
-
                 const oldImage = this.sprite.getImage(true);
                 oldImage.classList.remove("selected");
 
                 const newImage = sprite.getImage(true);
                 newImage.classList.add("selected");
 
-                this.placeTexture();
-
                 this._sprite = sprite;
+
+                this.placeTexture();
                 this.dispatchEvent(new Event("change"));
         }
 
@@ -84,6 +80,7 @@ export class SpriteSelectorElement extends HTMLElement {
                 for (const path of paths) {
                         const texture = getTexture(path);
                         const image = texture.getImage(true);
+                        image.classList.add("clickable");
                         this.grid.appendChild(image);
 
                         image.addEventListener("click", () => {
@@ -125,6 +122,7 @@ export class SpriteSelectorElement extends HTMLElement {
                         await texture.loadBitmap(file);
 
                         const image = texture.getImage(true);
+                        image.classList.add("clickable");
                         image.addEventListener("click", () => {
                                 this.sprite = texture;
                         });

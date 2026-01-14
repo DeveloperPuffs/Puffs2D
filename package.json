@@ -9,6 +9,7 @@
                 "preview": "vite preview"
         },
         "devDependencies": {
+                "@types/howler": "^2.2.12",
                 "typescript": "^5.9.3",
                 "vite": "^7.3.0"
         },
@@ -18,6 +19,7 @@
                 "@fontsource/monaspace-neon": "^5.2.5",
                 "@fontsource/monaspace-radon": "^5.2.5",
                 "@fontsource/monaspace-xenon": "^5.2.5",
+                "howler": "^2.2.4",
                 "konva": "^10.0.12",
                 "tippy.js": "^6.3.7"
         }

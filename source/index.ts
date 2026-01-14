@@ -60,13 +60,44 @@ if (import.meta.env.DEV) {
         });
 }
 
-import { setupRandomizer } from "./randomizer.js";
+import { setupRandomizer } from "./randomizer";
 setupRandomizer();
 
 const canvas = new Canvas2D();
 canvas.startRunning();
 
 const exporter = new Exporter2D();
+
+import { Howl } from "howler";
+
+const clickSound = new Howl({ src: "audio/sound/click.wav" });
+clickSound.volume(0.2);
+
+const clickable: readonly string[] = Object.freeze([
+        "INPUT", "BUTTON", "TEXTAREA", "CANVAS",
+] as const);
+
+window.addEventListener("click", event => {
+        if (event.target === null) {
+                return;
+        }
+
+        const target = event.target as HTMLElement;
+        if (target.classList.contains("clickable") || target.closest(".clickable") !== null) {
+                const pitch = 0.9 + Math.random() * 0.2;
+                clickSound.rate(pitch);
+                clickSound.play();
+                return;
+        }
+
+        if (!clickable.includes(target.tagName) && !target.isContentEditable) {
+                return;
+        }
+
+        const pitch = 0.75 + Math.random() * 0.5;
+        clickSound.rate(pitch);
+        clickSound.play();
+});
 
 enum Step {
         WELCOME = "welcome",

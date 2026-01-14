@@ -150,6 +150,7 @@ export class ColorPickerElement extends HTMLElement {
                 for (const preset of presets) {
                         const button = document.createElement("button");
                         button.style.backgroundColor = preset;
+                        button.classList.add("clickable");
                         button.addEventListener("click", () => {
                                 this.color = preset;
                         });
