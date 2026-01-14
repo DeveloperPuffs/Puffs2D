@@ -175,7 +175,6 @@ main.editing > #editor {
         overflow-y: hidden;
         padding-bottom: var(--small-spacing);
         padding-left: var(--small-spacing);
-        padding-right: var(--medium-spacing);
 }
 
 .step > .footer {

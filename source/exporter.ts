@@ -48,6 +48,7 @@ export class Exporter2D implements CharacterContext {
 
                 this.character = new Character(this);
                 this.character.frozenState = true;
+                this.character.flipDeadzone = false;
 
                 this.link = document.createElement("a");
                 this.preview = document.querySelector<HTMLImageElement>("#export-preview")!;

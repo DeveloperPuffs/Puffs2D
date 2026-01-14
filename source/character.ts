@@ -5,6 +5,7 @@ import { SliderElement } from "./elements/slider";
 import { Vector2D } from "./math";
 import { Entity2D } from "./physics";
 import { Outliner } from "./outliner";
+import { ToggleElement } from "./elements/toggle";
 
 enum Direction {
         LEFT,
@@ -87,6 +88,7 @@ export class Character extends Entity2D {
         private scale: Vector2D = new Vector2D(1, 1);
         private wobble: Vector2D = new Vector2D(1, 1);
 
+        private enableOutline: boolean;
         private outlineColor: string;
         private outlineThickness: number;
 
@@ -114,6 +116,7 @@ export class Character extends Entity2D {
         public includeName: boolean = true;
         public includeHands: boolean = true;
         public frozenState: boolean = false;
+        public flipDeadzone: boolean = true;
 
         constructor(private context: CharacterContext) {
                 super(0, 0, Character.WIDTH, Character.HEIGHT);
@@ -146,6 +149,11 @@ export class Character extends Entity2D {
                         this.hand.rasterize();
                 });
 
+                const outlineToggle = document.querySelector<ToggleElement>("#enable-outline")!;
+                outlineToggle.addEventListener("change", () => {
+                        this.enableOutline = outlineToggle.state;
+                });
+
                 const outlineColorPicker = document.querySelector<ColorPickerElement>("#outline-color-picker")!;
                 outlineColorPicker.addEventListener("input", () => {
                         this.outlineColor = outlineColorPicker.color;
@@ -156,6 +164,7 @@ export class Character extends Entity2D {
                         this.outlineThickness = outlineThicknessSlider.value;
                 });
 
+                this.enableOutline = outlineToggle.state;
                 this.outlineColor = outlineColorPicker.color;
                 this.outlineThickness = outlineThicknessSlider.value;
 
@@ -349,10 +358,12 @@ export class Character extends Entity2D {
                         }
                 }
 
-                const deadzone = this.body.width / 20;
-                const distance = this.context.cursorPosition.x - this.x;
-                if (Math.abs(distance) > deadzone) {
-                        this.direction = distance < 0 ? Direction.LEFT : Direction.RIGHT;
+                if (this.flipDeadzone) {
+                        const deadzone = this.body.width / 20;
+                        const distance = this.context.cursorPosition.x - this.x;
+                        if (Math.abs(distance) > deadzone) {
+                                this.direction = distance < 0 ? Direction.LEFT : Direction.RIGHT;
+                        }
                 }
         }
 
@@ -575,11 +586,12 @@ export class Character extends Entity2D {
                 const BUFFER_WIDTH = this.body.width * 5;
                 const BUFFER_HEIGHT = this.body.height * 5;
 
+                const thickness = this.enableOutline ? this.outlineThickness : 0;
                 const outlined = this.context.outliner.process(
                         BUFFER_WIDTH,
                         BUFFER_HEIGHT,
                         this.outlineColor,
-                        this.outlineThickness,
+                        thickness,
                         this.renderShape.bind(this)
                 );
 

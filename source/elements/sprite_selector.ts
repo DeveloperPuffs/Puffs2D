@@ -140,6 +140,28 @@ export class SpriteSelectorElement extends HTMLElement {
         }
 
         private initializeEditor() {
+                this.querySelector<HTMLLIElement>(".horizontal-flip")!.addEventListener("click", () => {
+                        this.sprite.metadata.transform.w *= -1;
+                        this.sprite.metadata.transform.x *= -1;
+                        this.placeTexture();
+                });
+
+                this.querySelector<HTMLLIElement>(".vertical-flip")!.addEventListener("click", () => {
+                        this.sprite.metadata.transform.h *= -1;
+                        this.sprite.metadata.transform.y *= -1;
+                        this.placeTexture();
+                });
+
+                this.querySelector<HTMLLIElement>(".rotate-left")!.addEventListener("click", () => {
+                        this.sprite.metadata.transform.r -= Math.PI / 2;
+                        this.placeTexture();
+                });
+
+                this.querySelector<HTMLLIElement>(".rotate-right")!.addEventListener("click", () => {
+                        this.sprite.metadata.transform.r += Math.PI / 2;
+                        this.placeTexture();
+                });
+
                 const canvasWrapper = this.querySelector<HTMLDivElement>(".sprite-editor > .canvas-wrapper")!;
 
                 const type = this.getAttribute("type");

@@ -12,7 +12,7 @@
                 <main class="editing">
                         <div id="editor">
                                 <ol id="stepper">
-                                        <li id="general-icon" class="icon" data-tippy-content="General Information">
+                                        <li id="general-icon" class="icon" data-tippy-content="General">
                                                 <i class="fa-solid fa-info"></i>
                                         </li>
                                         <li id="appearance-icon" class="icon" data-tippy-content="Appearance">
@@ -144,7 +144,7 @@
                                                         <div class="title">Miscellaneous</div>
                                                         <div class="scroller">
                                                                 <labeled-element for="enable-outline-toggle" label="Enable Outline" inline-label margin="less">
-                                                                        <toggle-element input-id="enable-outline-toggle" state="true"></toggle-element>
+                                                                        <toggle-element id="enable-outline" input-id="enable-outline-toggle" state="true"></toggle-element>
                                                                 </labeled-element>
                                                                 <labeled-element label="Outline Thickness" inline-label>
                                                                         <slider-element
@@ -273,11 +273,22 @@
                         <div class="sprite-grid"></div>
                         <div class="sprite-editor">
                                 <div class="canvas-wrapper"></div>
-                                <div class="sprite-options">
+                                <div class="options">
                                         <div>Image Options</div><br>
-                                        <labeled-element label="Name">
-                                                <input type="text" spellcheck="false">
-                                        </labeled-element>
+                                        <ol class="controls">
+                                                <li class="horizontal-flip" data-tippy-content="Flip Horizontally">
+                                                        <i class="fa-solid fa-left-right"></i>
+                                                </li>
+                                                <li class="vertical-flip" data-tippy-content="Flip Vertically">
+                                                        <i class="fa-solid fa-up-down"></i>
+                                                </li>
+                                                <li class="rotate-left" data-tippy-content="Rotate Left">
+                                                        <i class="fa-solid fa-rotate-left"></i>
+                                                </li>
+                                                <li class="rotate-right" data-tippy-content="Rotate Right">
+                                                        <i class="fa-solid fa-rotate-right"></i>
+                                                </li>
+                                        </ol>
                                 </div>
                         </div>
                 </template>
